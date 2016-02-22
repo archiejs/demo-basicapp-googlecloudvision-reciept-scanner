@@ -1,0 +1,11 @@
+{
+  "name": "env",
+  "version": "1.0.0",
+  "description": "Loads proper environment variables.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Naval Saini <navalnovel@gmail.com> (http://www.flipflopapp.com/)",
+  "license": "ISC"
+}
