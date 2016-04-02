@@ -13,12 +13,12 @@ module.exports.init = function(archie){
     app.db = archie.services.db;
 
     // NOTE: ncomment to use default User authentication provided in Archiejs
-    
+
     // setup local strategy
-//  var User = app.db.User; // hardcoded to use user
-//  passport.use(new LocalStrategy(User.authenticate()));
-//  passport.serializeUser(User.serializeUser());
-//  passport.deserializeUser(User.deserializeUser());
+    var User = app.db.User; // hardcoded to use user
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
 
     // listen to port
     app.listen(config.http.port, function(err){

@@ -5,6 +5,7 @@
   "plugin":{
       "provides": {
           "db": {
+            User: "user.js"
           }
       },
       "consumes": []
