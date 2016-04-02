@@ -16,10 +16,10 @@ exports.logout = function(req, res)
     req.logout();
     res.sendStatus(200);
 }
-    
+
 exports.register = function(req, res)
 {
-    var User = req.app.services.db.User;
+    var User = req.app.services.auth.User;
     var user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -33,12 +33,13 @@ exports.register = function(req, res)
                 console.log('error while user register!', e);
                 return res.status(400).send({ error: e.toString() });
             }
-            res.sendStatus(200);
+            res.sendStatus(201);
         }
     );
 }
 
-exports.checkAuth = function(req, res, next){
+exports.checkAuth = function(req, res, next)
+{
     if(!req.user){
         return res.sendStatus(404);
     }

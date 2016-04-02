@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var passportLocalMongoose = require('passport-local-mongoose');
 
 var walletSchema = require('./wallet');
 var merchantSchema = require('./merchant');
@@ -53,7 +52,5 @@ var userSchema = new mongoose.Schema({
 });
 
 //Schema.index({ });
-
-userSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('User', userSchema);
