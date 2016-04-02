@@ -124,7 +124,7 @@ module.exports.initHelmetHeaders = function (app) {
  */
 module.exports.initModulesServerRoutes = function (app) {
     config.files.routes.forEach( function(jsfile){
-        require( path.resolve(process.cwd(), 'routes', jsfile) ) (app); // setup routes
+        require( path.resolve(process.cwd(), 'config', 'routes', jsfile) ) (app); // setup routes
     });
 };
 

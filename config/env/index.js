@@ -13,7 +13,7 @@ var envConfig = _.merge(defaultConfig, environmentConfig);
 
 // Get files (ex. routes)
 envConfig.files = {
-    routes: require('./routes.js')
+    routes: require('./../routes')
 };
 
 module.exports = envConfig;

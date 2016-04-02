@@ -12,12 +12,17 @@ A short explaination of directories.
 
     It merges default.js, with the relevant enviroment variable config file.
 
-/env/routes.js
+/env/
 
-    You need to add any new route files to this js file manually.
+    Environment variables for different configurations - dev, production,
+    etc.
+
+/routes/index.js
+
+    You need to add any new route files to this js filmanually.
     We can perhaps later make this simpler.
 
-/plugins
+/deptree
 
     It contains dependencies among various plugins in a microservice. 
     The file /app.js calls this module to load the dependencies.
