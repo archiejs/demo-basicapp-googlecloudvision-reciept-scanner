@@ -1,19 +1,29 @@
 'use strict';
 
-var Archie = require('./archiejs');
+var Archie = require('archiejs');
+require('./config/init/enhancers.js'); // Load all enhancers
+var hasApis = (!process.argv[2]) || (process.argv[2] === 'app');
 
-var isAPIEndpoint = (!process.argv[2]) || (process.argv[2] === 'default');
+// Load the app's dependency tree
 
-// Load plugin configs
-var dependencies = require('./config/deptree');
-var tree = Archie.resolveConfig(dependencies, process.cwd());
+var deptree = require('./deptree');
+var theApp = process.argv[2] || 'app';
+var theAppTree = deptree[theApp];
+
+if(!Array.isArray(theAppTree)) {
+  throw new Error(theApp + ' config does not export an ARRAY.')
+}
+
+// Setup the app
+
+var tree = Archie.resolveConfig(theAppTree, process.cwd());
 
 Archie.createApp(tree, function(err, archie) {
     if(err){
         throw err;
     }
 
-    if ( isAPIEndpoint ) {
+    if ( hasApis ) {
         require('./config/init/api').init(archie);
     }
     require('./config/init/welcome');

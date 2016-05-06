@@ -1,5 +1,7 @@
 'use strict';
 
+var userController = require('./../../controllers/user');
+
 exports = module.exports = function(app) {
 
     app.post('/v1/login', userController.login);
