@@ -14,3 +14,8 @@ dumb.rdb
 # Misc Files
 # --------------------
 /logs-todo.txt
+
+# --------------------
+# Secured files
+# --------------------
+/config/secrets

@@ -29,7 +29,7 @@
     "node-cloud-vision-api": "^0.2.0",
     "passport": "^0.3.0",
     "passport-google-oauth": "^1.0.0",
-    "passport-local": "^1.0.0",
+    "passport-google-oauth20": "^1.0.0",
     "path": "^0.11.14",
     "redis": "^1.0.0",
     "serve-static": "^1.10.0",
