@@ -18,8 +18,8 @@ module.exports = {
 
   // google settings
   google: {
-    clientID: gconf.client_id,
-    clientSecret: gconf.secret_id,
-    callbackURL: '/api/auth/google/auth/callback'
+    clientID: gconf.web.client_id,
+    clientSecret: gconf.web.client_secret,
+    callbackURL: gconf.web.redirect_uris[0]
   }
 };
