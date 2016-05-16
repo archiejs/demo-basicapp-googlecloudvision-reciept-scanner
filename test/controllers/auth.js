@@ -18,3 +18,8 @@ exports.success = function(req, res)
 {
     res.send("success");
 }
+
+exports.failure = function(req, res)
+{
+    res.send("failure");
+}
