@@ -19,8 +19,23 @@ module.exports.init = function(archie){
       clientSecret: config.google.clientSecret,
       callbackURL: config.google.callbackURL
     }, function(accessToken, refreshToken, profile, done) {
-      User.findOrCreate(
-        { googleId: profile.id },
+      // console.log(profile);
+      var query = { googleId: profile.id };
+      var docs = {
+        googleId: profile.id,
+        profile: {
+          name: profile.displayName,
+          email: profile.emails,
+          gender: profile.gender
+        } };
+      var options = {
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true };
+      User.findOneAndUpdate(
+        query,
+        docs,
+        options,
         function (err, user) {
           return done(err, user);
         }
