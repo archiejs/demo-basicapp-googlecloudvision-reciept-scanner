@@ -1,10 +1,10 @@
 {
-    "name": "cloudvisionOcr",
+    "name": "google_drive",
     "version": "1.0.0",
-    "description": "A google cloudvision API based OCR scanner for receipts.",
+    "description": "Read access to google drive for reading the recipt images.",
     "plugins": {
         "provides": {
-            "ScanReceipt": "scanReceipt.js"
+            "GoogleDrive": "googleDrive.js"
         },
         "consumes": [],
         "packageWrapper": "default"
