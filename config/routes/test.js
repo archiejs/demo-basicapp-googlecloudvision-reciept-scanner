@@ -2,14 +2,12 @@
 
 var passport = require('passport');
 
-var testController = require('./../../test/controllers/auth');
-
 exports = module.exports = function(app) {
 
     // gets
-    app.get('/test/welcome', testController.welcome);
-    app.get('/test/success', testController.success);
-    app.get('/test/failure', testController.failure);
+    app.get('/test/welcome', welcome);
+    app.get('/test/success', success);
+    app.get('/test/failure', failure);
 
     // passport
     app.get('/test/auth/google', passport.authenticate('google', { scope : ['email'] }));
@@ -18,4 +16,30 @@ exports = module.exports = function(app) {
       failureRedirect : '/test/failure'
     }));
 
+}
+
+// controllers
+
+var welcome = function(req, res)
+{
+    res.send(
+      '<html>\
+        <head>\
+        <title>Test Google Auth</title>\
+        </head>\
+        <body>\
+        <a href="/test/auth/google">Login with google</a>\
+        </body>\
+      </html>'
+    );
+}
+
+var success = function(req, res)
+{
+    res.send("success");
+}
+
+var failure = function(req, res)
+{
+    res.send("failure");
 }
