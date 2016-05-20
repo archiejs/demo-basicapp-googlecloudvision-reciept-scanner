@@ -1,10 +1,10 @@
 var config = require('./../env'),
-    appInit = require('./express'),
-    socialInit = require('./social');
+    express = require('./express'),
+    passport = require('./passport');
 
 module.exports.startApp = function(archie){
-    var app = appInit.init(config);
-    socialInit.init(archie.services.db, config);
+    var app = express.init(config);
+    passport.init(archie.services.db, config);
 
     // add shortcuts to app
     app.services = archie.services;
