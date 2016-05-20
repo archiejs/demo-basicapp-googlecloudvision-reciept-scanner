@@ -1,7 +1,7 @@
 'use strict';
 
 var Archie = require('archiejs');
-require('./config/enhancers.js'); // Load all enhancers
+require('./config/common/enhancers.js'); // Load all enhancers
 var hasApis = (!process.argv[2]) || (process.argv[2] === 'app');
 
 // Load the app's dependency tree
@@ -27,5 +27,5 @@ Archie.createApp(tree, function(err, archie) {
         require('./config/webapp/index').startApp(archie);
     }
 
-    require('./config/welcome');
+    require('./config/common/welcome');
 });
