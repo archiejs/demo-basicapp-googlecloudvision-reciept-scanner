@@ -24,7 +24,7 @@ Archie.createApp(tree, function(err, archie) {
     }
 
     if ( hasApis ) {
-        require('./config/init/api').init(archie);
+        require('./config/init/main').startApp(archie);
     }
     require('./config/init/welcome');
 });
