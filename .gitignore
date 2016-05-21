@@ -19,3 +19,8 @@ dumb.rdb
 # Secured files
 # --------------------
 /config/secrets
+
+# --------------------
+# Misc fils
+# --------------------
+.*
