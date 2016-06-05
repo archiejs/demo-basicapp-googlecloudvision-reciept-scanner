@@ -10,7 +10,7 @@ GDrive.prototype.listFiles = function(auth, done) {
   service.files.list({
     auth: auth,
     pageSize: 10,
-    fields: "nextPageToken, files(id, name)"
+    fields: "nextPageToken, files(id, name, webViewLink)"
   }, function(err, response) {
     if (err) {
       console.log('The API returned an error: ' + err);
@@ -23,14 +23,11 @@ GDrive.prototype.listFiles = function(auth, done) {
       console.log('Files:');
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
-        console.log('%s (%s)', file.name, file.id);
+        // file url is 
+        console.log('%s (%s, %s)', file.name, file.id, file.webViewLink);
       }
     }
     done();
   });
 }
-
-GDrive.prototype.findFiles = function(auth, done) {
-}
-
 
