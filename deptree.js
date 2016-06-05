@@ -2,14 +2,25 @@
 
 var config = require('./config/env');
 
-// Package dependencies
+// individual modules
+
+exports.testUtils = {
+    "packagePath": "modules/testUtils"
+  };
+
+exports.googleDrive = "modules/googleDrive";
+
+exports.googleVision =
+  {
+    "packagePath": "modules/googleVisionOcr"
+  };
 
 /*
  * Common modules are common across sub-projects.
  * Ex: db module, analytics module are contendors.
  */
 
-var common = [
+exports.common = [
   {
     "packagePath": "models",
     "packageEnhancer": "mongodb",
@@ -19,5 +30,13 @@ var common = [
 
 // main app
 
-var app = module.exports.app = []
-  .concat(common);
+exports.app = 
+  [
+    exports.googleDrive,
+    exports.googleVision
+  ]
+  .concat(exports.common);
+
+// microservers - empty
+
+module.exports = exports;
