@@ -20,6 +20,7 @@ module.exports = {
   google: {
     clientID: gconf.web.client_id,
     clientSecret: gconf.web.client_secret,
+    projectId: gconf.web.project_id,
     callbackURL: gconf.web.redirect_uris[0]
   }
 };
