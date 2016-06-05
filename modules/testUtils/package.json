@@ -2,7 +2,7 @@
     "name": "testUtils",
     "version": "1.0.0",
     "description": "A set of common utilities.",
-    "plugins": {
+    "plugin": {
         "provides": {
             "GoogleAuthToken": "test/token.js"
         },

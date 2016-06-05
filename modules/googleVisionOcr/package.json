@@ -2,12 +2,11 @@
     "name": "cloudvisionOcr",
     "version": "1.0.0",
     "description": "A google cloudvision API based OCR scanner for receipts.",
-    "plugins": {
+    "plugin": {
         "provides": {
-            "ScanReceipt": "scanReceipt.js"
+            "ScanReceipt": "scanner.js"
         },
-        "consumes": [],
-        "packageWrapper": "default"
+        "consumes": []
     },
     "directories": {
         "test": "test"

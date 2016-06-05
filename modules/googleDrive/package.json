@@ -2,7 +2,7 @@
     "name": "google_drive",
     "version": "1.0.0",
     "description": "Read access to google drive for reading the recipt images.",
-    "plugins": {
+    "plugin": {
         "provides": {
             "GoogleDrive": "googleDrive.js"
         },

@@ -2,7 +2,7 @@
     "name": "google_docs",
     "version": "1.0.0",
     "description": "Access to google spreadsheet.",
-    "plugins": {
+    "plugin": {
         "provides": {
             "Spreadsheet": "spreadsheet.js"
         },
