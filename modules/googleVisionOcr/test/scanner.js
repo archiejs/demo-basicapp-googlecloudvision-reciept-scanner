@@ -23,8 +23,7 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#tests something', function(done){
-    console.log("running test 1");
-    scanner.detectLabels('./test/image1.jpg', done);
+    scanner.detectLabels('./test/image2.jpg', done);
   });
 
 });

@@ -1,0 +1,10 @@
+
+GOOGLE_APPLICATION_CREDENTIALS=./../../config/secrets/RecieptScanner-c941641e435c.json
+GCLOUD_PROJECT=recieptscanner
+
+.PHONY: test
+
+test:
+	export GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS)
+	export GCLOUD_PROJECT=$(GCLOUD_PROJECT)
+	mocha test/scanner.js -t 30000

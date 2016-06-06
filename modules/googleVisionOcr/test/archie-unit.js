@@ -10,7 +10,7 @@ var depfile = 'deptree';
 // load deps
 
 var deptrees = require(path.join(rootdir, depfile));
-var theTestApp = [ deptrees.googleVision, deptrees.testUtils ]; // to autogen
+var theTestApp = [ deptrees.googleVision ]; // to autogen
 
 // setup archiejs
 
