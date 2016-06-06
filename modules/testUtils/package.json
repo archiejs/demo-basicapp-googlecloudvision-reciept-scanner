@@ -4,7 +4,7 @@
     "description": "A set of common utilities.",
     "plugin": {
         "provides": {
-            "GoogleAuthToken": "test/token.js"
+            "GoogleAuthToken": "googleAuthToken.js"
         },
         "consumes": [],
         "packageWrapper": "default"

@@ -7,13 +7,13 @@ var execFile = require('child_process').execFile;
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
-var TOKEN_PATH = './test/.drive-nodejs-quickstart.json';
+var TOKEN_PATH = '.drive-nodejs-quickstart.json';
 
 // Load client secrets from a local file.
-module.exports = function(done) {
+module.exports = function setup(options, imports, done) {
   fs.readFile('./../../config/secrets/google-local.json', function processClientSecrets(err, content) {
     if (err) {
-      console.log('Error loading client secret file: ' + err);
+      console.error('Error loading client secret file: ' + err);
       return;
     }
     // Authorize a client with the loaded credentials, then call the
