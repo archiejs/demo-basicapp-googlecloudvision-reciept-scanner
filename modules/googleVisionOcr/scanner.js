@@ -4,7 +4,7 @@
 
 const GCloud = require('gcloud');
 
-var ScanDoc = module.exports = function(options) {
+var ScanDoc = function(options) {
   const gcloud = GCloud({ projectId: options.projectId });
   this.vision = gcloud.vision();
 }
@@ -19,3 +19,5 @@ ScanDoc.prototype.detectLabels = function(inputFile, callback) {
     callback(null, labels);
   });
 }
+
+module.exports = ScanDoc;
