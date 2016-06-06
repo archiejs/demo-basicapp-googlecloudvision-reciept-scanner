@@ -15,7 +15,7 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
     // dummy options and imports
     testApp(function(err, archie) {
       scanner = archie.getService("ScanReceipt");
-      console.log(scanner);
+      done();
     });
   });
 
@@ -23,6 +23,7 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#tests something', function(done){
+    console.log("running test 1");
     scanner.detectLabels('./test/image1.jpg', done);
   });
 
