@@ -1,0 +1,21 @@
+{
+    "name": "commandline",
+    "version": "1.0.0",
+    "description": "Command line for reading and scanning recipts.",
+    "plugin": {
+        "provides": [],
+        "consumes": []
+    },
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "make test"
+    },
+    "devDependencies": {
+        "chai": "^3.3.0",
+        "mocha": "^2.3.3"
+    },
+    "author": "",
+    "license": ""
+}
