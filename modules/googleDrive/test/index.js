@@ -1,27 +1,29 @@
 'use strict';
 
-var secret = require('./../../../config/secrets/google-local.json');
-var token = require('./token');
+var chai = require('chai');
+var expect = chai.expect;
+var should = chai.should();
 
-var GDrive = require('./../');
-var gdrive = new GDrive();
-
-var auth;
+var testApp = require('./archie-unit');
 
 describe('Google drive Testcases: ', function() {
+  
+  var tokenService;
+  var driveService;
 
-  before(function(done) {
-    this.timeout(15000);
-    token(function(_auth) {
-      auth = _auth;
+  before(function(done){
+    testApp(function(err, archie) {
+      tokenService = archie.getService("GoogleAuthToken");
+      driveService = archie.getService("GoogleDrive");
       done();
     });
   });
 
   it('should list files in google drive', function(done) {
-    gdrive.listFiles(auth, done);
+    this.timeout(15000); // test timeout
+    tokenService.authorize(function(auth){
+      gdrive.listFiles(auth, done);
+    });
   });
 
 });
-
-

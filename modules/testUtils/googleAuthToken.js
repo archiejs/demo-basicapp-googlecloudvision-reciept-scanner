@@ -10,17 +10,35 @@ var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
 var TOKEN_PATH = '.drive-nodejs-quickstart.json';
 
 // Load client secrets from a local file.
-module.exports = function setup(options, imports, done) {
+var GAuthToken = function setup(options, imports, done) {
+  var self = this;
+
   fs.readFile('./../../config/secrets/google-local.json', function processClientSecrets(err, content) {
     if (err) {
       console.error('Error loading client secret file: ' + err);
       return;
     }
+
+    self._credentials = JSON.parse(content);
+
     // Authorize a client with the loaded credentials, then call the
     // Drive API.
-    authorize(JSON.parse(content), done);
+    authorize(self._credentials, function(auth) {
+      done();
+    });
   });
 }
+
+GAuthToken.prototype.authorize = function(done) {
+  console.trace(this._credentials);
+  authorize(this._credentials, done);
+};
+
+module.exports = GAuthToken;
+
+
+// inner functions
+
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
