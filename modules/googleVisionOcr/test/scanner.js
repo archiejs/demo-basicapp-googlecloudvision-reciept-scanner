@@ -11,8 +11,6 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   var scanner;
 
   before(function(done){
-    // create an instance of the plugin and pass it
-    // dummy options and imports
     testApp(function(err, archie) {
       scanner = archie.getService("ScanReceipt");
       done();
