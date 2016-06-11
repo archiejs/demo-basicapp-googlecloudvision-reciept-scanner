@@ -4,7 +4,7 @@ const path = require('path');
 
 // consts
 
-var rootdir = path.resolve("./../../");
+var rootdir = path.join( __dirname, "./../../../");
 var depfile = 'deptree';
 
 // load deps

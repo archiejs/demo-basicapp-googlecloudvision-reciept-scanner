@@ -3,7 +3,9 @@
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 
-var GDrive = module.exports = function() {};
+var GDrive = module.exports = function(config, deps, ready) {
+  ready();
+};
 
 GDrive.prototype.listFiles = function(auth, done) {
   var service = google.drive('v3');
@@ -23,11 +25,10 @@ GDrive.prototype.listFiles = function(auth, done) {
       console.log('Files:');
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
-        // file url is 
+        // file url is
         console.log('%s (%s, %s)', file.name, file.id, file.webViewLink);
       }
     }
     done();
   });
 }
-

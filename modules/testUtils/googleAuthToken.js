@@ -1,37 +1,36 @@
-var fs = require('fs');
-var readline = require('readline');
-var google = require('googleapis');
-var googleAuth = require('google-auth-library');
-var execFile = require('child_process').execFile;
+const fs = require('fs');
+const readline = require('readline');
+const google = require('googleapis');
+const googleAuth = require('google-auth-library');
+const execFile = require('child_process').execFile;
+const path = require('path');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
 var TOKEN_PATH = '.drive-nodejs-quickstart.json';
+var GOOG_LOCAL_KEYS = path.join(__dirname, '..', '..', 'config', 'secrets', 'google-local.json');
 
 // Load client secrets from a local file.
-var GAuthToken = function setup(options, imports, done) {
-  var self = this;
+var GAuthToken = function setup(options, deps, ready) {
+  var obj = this;
 
-  fs.readFile('./../../config/secrets/google-local.json', function processClientSecrets(err, content) {
+  fs.readFile(GOOG_LOCAL_KEYS, function processClientSecrets(err, content) {
     if (err) {
       console.error('Error loading client secret file: ' + err);
       return;
     }
 
-    self._credentials = JSON.parse(content);
+    obj._creds = JSON.parse(content);
 
     // Authorize a client with the loaded credentials, then call the
     // Drive API.
-    authorize(self._credentials, function(auth) {
-      done();
-    });
+    obj.authorize(ready);
   });
 }
 
 GAuthToken.prototype.authorize = function(done) {
-  console.trace(this._credentials);
-  authorize(this._credentials, done);
+  authorize(this._creds, done);
 };
 
 module.exports = GAuthToken;

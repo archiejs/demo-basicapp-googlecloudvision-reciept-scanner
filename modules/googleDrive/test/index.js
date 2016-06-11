@@ -22,7 +22,7 @@ describe('Google drive Testcases: ', function() {
   it('should list files in google drive', function(done) {
     this.timeout(15000); // test timeout
     tokenService.authorize(function(auth){
-      gdrive.listFiles(auth, done);
+      driveService.listFiles(auth, done);
     });
   });
 

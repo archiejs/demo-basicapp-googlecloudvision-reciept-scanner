@@ -8,7 +8,7 @@ var googAuthToken;
 var auth;
 var readline;
 
-var setup = function(options, imports) {
+var setup = function(options, deps, ready) {
   drive = imports.GoogleDrive;
   scanner = imports.ScanReceipt;
   googAuthToken = imports.googleAuthToken;
@@ -21,6 +21,8 @@ var setup = function(options, imports) {
   // 2. Get the drive directory
   // 3. Prepare list of files to scan
   // 4. Prepare an output.txt in the same folder
+
+  ready();
 };
 
 function getTokenFromUser(done) {

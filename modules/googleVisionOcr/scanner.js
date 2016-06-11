@@ -2,9 +2,10 @@
 
 const GCloud = require('gcloud');
 
-var ScanDoc = function(options) {
+var ScanDoc = function(options, deps, ready) {
   const gcloud = GCloud({ projectId: options.projectId });
   this.vision = gcloud.vision();
+  ready();
 }
 
 ScanDoc.prototype.detectAmountInRecipt = function(inputFile, callback) {
@@ -14,9 +15,9 @@ ScanDoc.prototype.detectAmountInRecipt = function(inputFile, callback) {
       if(err) {
         return callback(err);
       }
-      
+
       var desc = result[0].desc;
-      var amts = 
+      var amts =
         desc
         .split(/[\n ,]+/)
         .filter( function(amt) {
