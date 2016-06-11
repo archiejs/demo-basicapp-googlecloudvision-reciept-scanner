@@ -8,10 +8,10 @@ var googAuthToken;
 var auth;
 var readline;
 
-var setup = function(options, deps, ready) {
-  drive = imports.GoogleDrive;
-  scanner = imports.ScanReceipt;
-  googAuthToken = imports.googleAuthToken;
+module.exports = function setup(options, deps, ready) {
+  drive = deps.GoogleDrive;
+  scanner = deps.ScanReceipt;
+  googAuthToken = deps.googleAuthToken;
   readline = readline.createInterface({
     input: process.stdin,
     output: process.stdout
