@@ -4,16 +4,13 @@ var config = require('./config/env');
 
 // individual modules
 
-exports.testUtils = {
-    "packagePath": "modules/testUtils"
-  };
+exports.testUtils = "modules/testUtils";
 
 exports.googleDrive = "modules/googleDrive";
 
-exports.googleVision =
-  {
-    "packagePath": "modules/googleVisionOcr"
-  };
+exports.googleVision = "modules/googleVisionOcr";
+
+exports.commandline = "modules/commandline";
 
 /*
  * Common modules are common across sub-projects.
@@ -33,7 +30,8 @@ exports.common = [
 exports.app = 
   [
     exports.googleDrive,
-    exports.googleVision
+    exports.googleVision,
+    exports.commandline
   ]
   .concat(exports.common);
 

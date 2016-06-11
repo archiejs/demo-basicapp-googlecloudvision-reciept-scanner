@@ -22,17 +22,35 @@ var setup = function(options, deps, ready) {
   // 3. Prepare list of files to scan
   // 4. Prepare an output.txt in the same folder
 
-  ready();
+  var data = {};
+
+  new Promise((resolve) => {
+    getTokenFromUser(resolve);
+  }).then((auth) => {
+    data.auth = auth;
+    return new Promise((resolve) => {
+      getTaskDetailsFromUser(resolve);
+    });
+  }).then((resolve) => {
+    return new Promise((resolve) => {
+      getFilesFromDrive(resolve);
+    });
+  }).then(() => {
+    ready();
+  });
+  
 };
 
-function getTokenFromUser(done) {
+function getTokenFromUser(resolve) {
+  console.log('getTokenFromUser');
   googAuthToken(function(_auth){
     auth = _auth;
-    done();
+    resolve(auth);
   });
 }
 
 function getTaskDetailsFromUser(done) {
+  console.log('getTaskDetailsFromUser');
   var data = {};
   new Promise()
     .then(function(done, fail) {
@@ -53,11 +71,15 @@ function getTaskDetailsFromUser(done) {
     });
 }
 
-function getFilesFromDrive() {
+function getFilesFromDrive(resolve) {
+  console.log('getFilesFromDrive');
+  resolve();
 }
 
 function doScanNewReciepts() {
+  console.log('doScanNewReciepts');
 }
 
 function doPrepareReport() {
+  console.log('doPrepareReport');
 }
