@@ -2,21 +2,18 @@
 
 const path = require('path');
 
-// consts
+// spaceship path correction
 
-var rootdir = path.join( __dirname, "./../../../");
-var depfile = 'deptree';
-
-// load deps
-
-var deptrees = require(path.join(rootdir, depfile));
-var theTestApp = [ deptrees.googleDrive, deptrees.testUtils ]; // to autogen
+const rootDir = path.join(__dirname, '..', '..', '..');
+const depsFile = path.join(rootDir, 'deptree');
+const depTrees = require(depsFile);
 
 // setup archiejs
 
 var Archie = require('archiejs');
 
-var tree = Archie.resolveConfig(theTestApp, rootdir);
+const theTestApp = [ depTrees.googleDrive, depTrees.testUtils ]; // to autogen
+const tree = Archie.resolveConfig(theTestApp, rootDir);
 
 module.exports = function(done) {
   Archie.createApp(tree, function(err, archie) {
