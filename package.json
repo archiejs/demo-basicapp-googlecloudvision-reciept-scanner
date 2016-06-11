@@ -1,10 +1,11 @@
 {
-  "name": "ArchieJs",
+  "name": "demoapp-recipt-scanner",
   "version": "1.0.0",
-  "description": "A nodejs framework for writing microservice architecture and polyglot code.",
+  "description": "A demo application for ArchieJS, a nodejs framework",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mochas test"
+    "test": "./node_modules/.bin/mochas test",
+    "list": "./scripts/show_all_modules.sh"
   },
   "license": "ISC",
   "dependencies": {
