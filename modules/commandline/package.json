@@ -4,7 +4,7 @@
     "description": "Command line for reading and scanning recipts.",
     "plugin": {
         "provides": [],
-        "consumes": []
+        "consumes": [ "GoogleDrive", "ScanReceipt" ]
     },
     "directories": {
         "test": "test"
