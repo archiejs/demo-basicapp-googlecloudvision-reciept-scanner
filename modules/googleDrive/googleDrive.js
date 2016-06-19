@@ -3,8 +3,7 @@
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 
-var GDrive = module.exports = function(config, deps, ready) {
-  ready();
+var GDrive = module.exports = function(config, deps) {
 };
 
 GDrive.prototype.listFiles = function(auth, done) {

@@ -12,6 +12,7 @@ describe('Google drive Testcases: ', function() {
   var driveService;
 
   before(function(done){
+    this.timeout(15000);
     testApp(function(err, archie) {
       tokenService = archie.getService("GoogleAuthToken");
       driveService = archie.getService("GoogleDrive");
@@ -20,7 +21,7 @@ describe('Google drive Testcases: ', function() {
   });
 
   it('should list files in google drive', function(done) {
-    this.timeout(15000); // test timeout
+    this.timeout(15000);
     tokenService.authorize(function(auth){
       driveService.listFiles(auth, done);
     });

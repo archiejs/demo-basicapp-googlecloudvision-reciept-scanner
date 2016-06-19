@@ -2,10 +2,9 @@
 
 const GCloud = require('gcloud');
 
-var ScanDoc = function(options, deps, ready) {
+var ScanDoc = function(options, deps) {
   const gcloud = GCloud({ projectId: options.projectId });
   this.vision = gcloud.vision();
-  ready();
 }
 
 ScanDoc.prototype.detectAmountInRecipt = function(inputFile, callback) {
