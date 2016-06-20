@@ -5,6 +5,7 @@ const googleAuth = require('google-auth-library');
 const execFile = require('child_process').execFile;
 const path = require('path');
 const promisify = require('es6-promisify');
+const debug = require('debug')('demo-archiejs-googleauth');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
@@ -58,8 +59,10 @@ function authorize(credentials, callback) {
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
     if (err) {
+      debug('get a new token');
       getNewToken(oauth2Client, callback);
     } else {
+      debug('reuse the old token');
       oauth2Client.credentials = JSON.parse(token);
       callback(oauth2Client);
     }
