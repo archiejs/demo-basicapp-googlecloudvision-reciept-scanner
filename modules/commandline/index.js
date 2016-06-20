@@ -2,7 +2,7 @@
 
 const readline = require('readline');
 const promisify = require('es6-promisify');
-const debug = require('debug')('demo-archiejs-googleauth');
+const debug = require('debug')('demo-archiejs-cmdline');
 
 var auth;
 var drive;
