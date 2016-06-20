@@ -2,11 +2,16 @@
 
 var readline = require('readline');
 
+var auth;
 var drive;
 var scanner;
 var readline;
+var details = {};
 
-module.exports = function setup(options, deps, ready) {
+module.exports = function setup(options, deps) {
+  var obj = this;
+
+  auth = deps.GoogleAuthToken;
   drive = deps.GoogleDrive;
   scanner = deps.ScanReceipt;
   readline = readline.createInterface({
@@ -14,61 +19,45 @@ module.exports = function setup(options, deps, ready) {
     output: process.stdout
   });
 
-  console.log(deps);
-
   // 1. Get the token
   // 2. Get the drive directory
   // 3. Prepare list of files to scan
   // 4. Prepare an output.txt in the same folder
 
-  var auth;
+  return
+    new Promise((resolve) => auth.authorize(resolve))
+    .then((_auth) => { auth = _auth; })
+    .then(() => getTaskDetailsFromUser)
+    .then(() => getFilesFromDrive)
+    .then(() => { return obj; });
 
-  return new Promise((resolve) => {
-    console.log('getTokenFromUser');
-    deps.googAuthToken(resolve);
-  }).then((_auth) => {
-    auth = _auth;
-  }).then(() => {
-    console.log("getTaskDetailsFromUser");
-    return new Promise((resolve) => {
-      getTaskDetailsFromUser(resolve);
-    });
-  }).then((resolve) => {
-    console.log("getFilesFromDrive");
-    return new Promise((resolve) => {
-      getFilesFromDrive(resolve);
-    });
-  }).then(() => {
-    ready();
-  });
-  
 };
 
-function getTaskDetailsFromUser(done) {
+function getTaskDetailsFromUser() {
   console.log('getTaskDetailsFromUser');
-  var data = {};
-  new Promise()
-    .then(function(done, fail) {
+  /*
+  return new Promise()
+    .then((done, fail) => {
       readline.question('What is the month on the reciepts (1-12) : ', function(month) {
         if(month) {
-          data.month = month;
+          details.month = month;
         }
         done();
       });
     })
-    .then(function(done, fail) {
+    .then((done, fail) => {
       readline.question('What is the year on reciepts (YY) : ', function(year) {
         if(year) {
-          data.year = year;
+          details.year = year;
         }
         done();
       });
     });
+   */
 }
 
-function getFilesFromDrive(resolve) {
+function getFilesFromDrive() {
   console.log('getFilesFromDrive');
-  resolve();
 }
 
 function doScanNewReciepts() {

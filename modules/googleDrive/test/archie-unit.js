@@ -12,7 +12,7 @@ const depTrees = require(depsFile);
 
 var Archie = require('archiejs');
 
-const theTestApp = [ depTrees.googleDrive, depTrees.testUtils ]; // to autogen
+const theTestApp = [ depTrees.googleDrive, depTrees.googleAuth ]; // to autogen
 const tree = Archie.resolveConfig(theTestApp, rootDir);
 
 module.exports = function(done) {

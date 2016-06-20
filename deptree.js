@@ -4,7 +4,7 @@ var config = require('./config/env');
 
 // individual modules
 
-exports.testUtils = "modules/testUtils";
+exports.googleAuth = "modules/googleAuth";
 
 exports.googleDrive = "modules/googleDrive";
 
@@ -29,6 +29,7 @@ exports.common = [
 
 exports.app = 
   [
+    exports.googleAuth,
     exports.googleDrive,
     exports.googleVision,
     exports.commandline

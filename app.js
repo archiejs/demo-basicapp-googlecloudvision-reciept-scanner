@@ -2,7 +2,7 @@
 
 var Archie = require('archiejs');
 require('./config/common/enhancers.js'); // Load all enhancers
-var hasApis = (!process.argv[2]) || (process.argv[2] === 'app');
+//var hasApis = (!process.argv[2]) || (process.argv[2] === 'app');
 
 // Load the app's dependency tree
 
@@ -23,9 +23,11 @@ Archie.createApp(tree, function(err, archie) {
         throw err;
     }
 
+    /*
     if ( hasApis ) {
         require('./config/webapp/index').startApp(archie);
     }
+    */
 
     require('./config/common/welcome');
 });

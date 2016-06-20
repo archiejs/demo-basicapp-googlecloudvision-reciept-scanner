@@ -14,7 +14,8 @@ GDrive.prototype.listFiles = function(auth, done) {
     fields: "nextPageToken, files(id, name, webViewLink)"
   }, function(err, response) {
     if (err) {
-      console.log('The API returned an error: ' + err);
+      console.error("Error in API");
+      console.error(err);
       return;
     }
     var files = response.files;

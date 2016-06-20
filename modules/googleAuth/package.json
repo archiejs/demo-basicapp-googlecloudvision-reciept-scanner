@@ -1,0 +1,23 @@
+{
+  "name": "googleAuth",
+  "version": "1.0.0",
+  "description": "A set of common utilities.",
+  "plugin": {
+    "provides": {
+      "GoogleAuthToken": "googleAuthToken.js"
+    },
+    "consumes": []
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "googleapis": "^8.2.0"
+  }
+}
