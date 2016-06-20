@@ -13,4 +13,4 @@ if ( isAPIEndpoint ){
         o( 'HTTPs:\t\t\t\ton' );
 }
 o( '--' );
-o( 'Applicatin started');
+o( 'Application started');

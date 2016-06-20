@@ -18,11 +18,13 @@ exports.commandline = "modules/commandline";
  */
 
 exports.common = [
+  /*
   {
     "packagePath": "models",
     "packageEnhancer": "mongodb",
     "server": config.db
   }
+ */
 ];
 
 // main app
