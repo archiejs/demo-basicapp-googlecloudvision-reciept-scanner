@@ -4,7 +4,7 @@
   "description": "A set of common utilities.",
   "plugin": {
     "provides": {
-      "GoogleAuthToken": "googleAuthToken.js"
+      "GoogleCmdAuth": "googleCmdAuthToken.js"
     },
     "consumes": []
   },

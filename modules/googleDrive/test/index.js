@@ -14,7 +14,7 @@ describe('Google drive Testcases: ', function() {
   before(function(done){
     this.timeout(15000);
     testApp(function(err, archie) {
-      tokenService = archie.getService("GoogleAuthToken");
+      tokenService = archie.getService("GoogleCmdAuth");
       driveService = archie.getService("GoogleDrive");
       done();
     });

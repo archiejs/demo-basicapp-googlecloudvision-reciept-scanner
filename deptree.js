@@ -18,13 +18,11 @@ exports.commandline = "modules/commandline";
  */
 
 exports.common = [
-  /*
   {
     "packagePath": "models",
     "packageEnhancer": "mongodb",
     "server": config.db
   }
- */
 ];
 
 // main app
@@ -33,10 +31,20 @@ exports.app =
   [
     exports.googleAuth,
     exports.googleDrive,
-    exports.googleVision,
-    exports.commandline
+    exports.googleVision
   ]
   .concat(exports.common);
+
+// a command line version
+
+exports.commandline = 
+  [
+    exports.googleAuth,
+    exports.googleDrive,
+    exports.googleVision,
+    exports.commandline
+  ];
+
 
 // microservers - empty
 

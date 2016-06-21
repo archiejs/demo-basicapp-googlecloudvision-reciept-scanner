@@ -13,7 +13,7 @@ var details = {};
 module.exports = function setup(options, deps) {
   var obj = this;
 
-  auth = deps.GoogleAuthToken;
+  auth = deps.GoogleCmdAuth;
   drive = deps.GoogleDrive;
   scanner = deps.ScanReceipt;
   
