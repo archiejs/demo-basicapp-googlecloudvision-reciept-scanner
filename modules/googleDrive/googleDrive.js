@@ -1,9 +1,13 @@
 'use strict';
 
-var google = require('googleapis');
-var googleAuth = require('google-auth-library');
+const google = require('googleapis');
+const googleAuth = require('google-auth-library');
+const promisify = require('es6-promisify');
+const service = google.drive('v3');
 
-var GDrive = module.exports = function(config, deps) {
+const filesQuery = promisify(service.files.list, service.files);
+
+let GDrive = module.exports = function(config, deps) {
 };
 
 /**
@@ -12,9 +16,9 @@ var GDrive = module.exports = function(config, deps) {
  * @params {json} auth - The authentication information of the user
  * @params {json} folder - The folder we are iterating
  *
- * TODO use a generator
  */
-GDrive.prototype.findImageFiles = function(auth, folderId, done) {
+GDrive.prototype.findImageFiles = function(auth, folderId) {
+  console.log("findImageFiles");
   if (typeof(folderId) == 'function') {
     done = folderId;
     folderId = null;
@@ -33,18 +37,11 @@ GDrive.prototype.findImageFiles = function(auth, folderId, done) {
     fields: "nextPageToken, files(id, name, webViewLink)"
   }
 
-  var service = google.drive('v3');
-
-  service.files.list(query, function(err, response) {
-    if (err) {
-      console.error("Error in API");
-      console.error(err);
-    }
-    done(err, response && response.files);
-  });
+  return filesQuery(query);
 }
 
-GDrive.prototype.findFolderIdFromName = function(auth, name, done) {
+GDrive.prototype.findFolderIdFromName = function(auth, name) {
+  console.log("findFolderIdFromName");
 
   var q = `name='${name}' and mimeType='application/vnd.google-apps.folder'`;
 
@@ -53,14 +50,6 @@ GDrive.prototype.findFolderIdFromName = function(auth, name, done) {
     q,
     fields: "files(id, name, webViewLink)"
   }
-
-  var service = google.drive('v3');
-
-  service.files.list(query, function(err, response) {
-    if (err) {
-      console.error("Error in API");
-      console.error(err);
-    }
-    done(err, response && response.files);
-  });
+  
+  return filesQuery(query);
 }

@@ -21,30 +21,38 @@ describe('Google drive Testcases: ', function() {
   });
 
   it('should find folder with Receipts name', function(done) {
-    tokenService.authorize(function(auth){
-      driveService.findFolderIdFromName(auth, 'Receipts', function(err, result) {
+    tokenService.authorize()
+      .then((auth) => driveService.findFolderIdFromName(auth, 'Receipts'))
+      .then(result => {
         console.log(result);
         done();
       });
-    });
   }).timeout(15000);
 
   it('should list files in google drive', function(done) {
-    tokenService.authorize(function(auth){
-      driveService.findImageFiles(auth, function(err, files) {
+    tokenService.authorize()
+      .then(driveService.findImageFiles(auth))
+      .then(() => {
         console.log(files);
         done();
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(-1);
       });
-    });
   }).timeout(15000);
 
   it('should list files in google drive', function(done) {
-    tokenService.authorize(function(auth){
-      driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk', function(err, files) {
+    tokenService.authorize()
+      .then((auth) => driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
+      .then((files) => {
         console.log(files);
         done();
+      })
+      .catch(err => {
+        console.log(err);
+        process.exit(-1);
       });
-    });
   }).timeout(15000);
 
 });
