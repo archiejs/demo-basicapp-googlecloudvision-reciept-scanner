@@ -10,6 +10,7 @@ var scanner;
 var question;
 
 module.exports = function setup(options, deps) {
+  debug('commandline init');
   var obj = this;
 
   auth = deps.GoogleCmdAuth;
@@ -31,12 +32,20 @@ module.exports = function setup(options, deps) {
 
   // a json `details` is used to pass values between functions in this promise structure
   let result =
-    new Promise((resolve) => auth.authorize(resolve))
+    auth.authorize()
     .then((_auth) => { auth = _auth; })
+    .catch(err => {
+      console.error('you might need to delete the file .drive-nodejs-quickstart.json , if this is a timeout error');
+      process.exit(-1);
+    })
     .then(getTaskDetailsFromUser) // adds month, year and folder name to details
     .then(getFilesFromDrive)  // adds folder id and files to details
     .then(doScanNewReceipts) // scans new receipts
     .then(() => { return obj; })
+    .catch(err => {
+      console.error(err);
+      process.exit(-1);
+    });
 
   return result;
 };
@@ -62,22 +71,22 @@ function getFilesFromDrive(details) {
   debug('getFilesFromDrive');
   return drive.findFolderIdFromName(auth, details.folderName)
   .then(result => {
-    details.folderId = result.shift().id
+    details.folderId = result.id
     return details.folderId;
   })
   .then((folderId) => drive.findImageFiles(auth, folderId))
-  .then(files => {
-    details.files = files;
-    debug(`Files: ${files}`);
-    return details.files;
+  .then(page => {
+    details.files = page.files;
+    debug(`Found ${page.files.length} files`);
+    return details.files.map(item => item.webViewLink);
   });
 }
 
 function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
-  var files = details.files.slice(0,1);
+  var files = files.slice(0,1);
   return Promise.all(
-    files.map(file => vision.detectAmountInRecipt(file))
+    files.map(file => scanner.detectAmountInRecipt(file))
   )
   .then(contents => {
     console.log(contents.result);
