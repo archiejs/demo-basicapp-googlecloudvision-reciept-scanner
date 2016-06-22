@@ -22,7 +22,9 @@ describe('Google drive Testcases: ', function() {
 
   it('should find folder with Receipts name', function(done) {
     tokenService.authorize()
-      .then((auth) => driveService.findFolderIdFromName(auth, 'Receipts'))
+      .then((auth) => {
+        driveService.findFolderIdFromName(auth, 'Receipts');
+      })
       .then(result => {
         console.log(result);
         done();
@@ -31,8 +33,8 @@ describe('Google drive Testcases: ', function() {
 
   it('should list files in google drive', function(done) {
     tokenService.authorize()
-      .then(driveService.findImageFiles(auth))
-      .then(() => {
+      .then(driveService.findImageFiles)
+      .then((files) => {
         console.log(files);
         done();
       })
@@ -42,7 +44,7 @@ describe('Google drive Testcases: ', function() {
       });
   }).timeout(15000);
 
-  it('should list files in google drive', function(done) {
+  it('should list files in Receipt folder in google drive', function(done) {
     tokenService.authorize()
       .then((auth) => driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
       .then((files) => {

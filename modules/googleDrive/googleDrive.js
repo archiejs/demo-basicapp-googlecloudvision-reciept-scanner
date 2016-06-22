@@ -4,6 +4,7 @@ const google = require('googleapis');
 const googleAuth = require('google-auth-library');
 const promisify = require('es6-promisify');
 const service = google.drive('v3');
+const debug = require('debug')('demo-archiejs-gdrive');
 
 const filesQuery = promisify(service.files.list, service.files);
 
@@ -18,7 +19,7 @@ let GDrive = module.exports = function(config, deps) {
  *
  */
 GDrive.prototype.findImageFiles = function(auth, folderId) {
-  console.log("findImageFiles");
+  debug("findImageFiles");
   if (typeof(folderId) == 'function') {
     done = folderId;
     folderId = null;
@@ -41,7 +42,7 @@ GDrive.prototype.findImageFiles = function(auth, folderId) {
 }
 
 GDrive.prototype.findFolderIdFromName = function(auth, name) {
-  console.log("findFolderIdFromName");
+  debug("findFolderIdFromName");
 
   var q = `name='${name}' and mimeType='application/vnd.google-apps.folder'`;
 

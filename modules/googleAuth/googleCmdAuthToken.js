@@ -28,7 +28,7 @@ var GAuthToken = function setup(options, deps) {
     })
       // Authorize a client with the loaded credentials, then call the
       // Drive API.
-    .then((creds) => authPromise(creds))
+    .then(authPromise)
     .then(() => { return obj; });
 }
 
@@ -50,6 +50,7 @@ module.exports = GAuthToken;
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
+  debug(`authorize ${credentials}`);
   var clientSecret = credentials.web.client_secret;
   var clientId = credentials.web.client_id;
   var redirectUrl = credentials.web.redirect_uris[0];
@@ -64,7 +65,7 @@ function authorize(credentials, callback) {
     } else {
       debug('reuse the old token');
       oauth2Client.credentials = JSON.parse(token);
-      callback(oauth2Client);
+      callback(null, oauth2Client);
     }
   });
 }
@@ -93,11 +94,11 @@ function getNewToken(oauth2Client, callback) {
     oauth2Client.getToken(code, function(err, token) {
       if (err) {
         console.log('Error while trying to retrieve access token', err);
-        return;
+        return callback(err);
       }
       oauth2Client.credentials = token;
       storeToken(token);
-      callback(oauth2Client);
+      callback(null, oauth2Client);
     });
   });
 }
