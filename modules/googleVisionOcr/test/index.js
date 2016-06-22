@@ -38,4 +38,17 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
     });
   });
 
+  it('#tests recipt in a link', function(done) {
+    scanner.detectAmountInRecipt("https://en.wikipedia.org/wiki/Receipt#/media/File:ReceiptSwiss.jpg")
+    .then(({ result, amount }) => {
+      console.log('result:', JSON.stringify(result[0].desc, null, 2));
+      should.exist(result, "Result should exist");
+      done();
+    })
+    .catch((err) => {
+      console.error(err);
+      done(err)
+    });
+  });
+
 });

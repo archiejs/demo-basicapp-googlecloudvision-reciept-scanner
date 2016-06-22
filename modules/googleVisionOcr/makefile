@@ -6,4 +6,4 @@ ENV_VARS=GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) GCLOUD
 .PHONY: test
 
 test:
-	$(ENV_VARS) mocha test/index.js --no-timeouts
+	$(ENV_VARS) mocha test/index.js --no-timeouts $(ARGS)
