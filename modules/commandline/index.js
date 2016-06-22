@@ -84,7 +84,7 @@ function getFilesFromDrive(details) {
 
 function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
-  var files = files.slice(0,1);
+  var files = files.slice(0,1); // try scanning one
   return Promise.all(
     files.map(file => scanner.detectAmountInRecipt(file))
   )

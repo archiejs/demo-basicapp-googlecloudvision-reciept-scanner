@@ -2,6 +2,7 @@
 
 const GCloud = require('gcloud');
 const promisify = require('es6-promisify');
+const debug = require('debug')('demo-archiejs-scanner');
 
 var ScanDoc = function(options, deps) {
   const gcloud = GCloud({ projectId: options.projectId });
@@ -12,14 +13,17 @@ ScanDoc.prototype.detectAmountInRecipt = function(inputFile) {
   // Make a call to the Vision API to detect the labels
   
   return new Promise((resolve, reject) => {
+    debug(`scan ${inputFile}`);
   
     this.vision.detectText(inputFile, { verbose: true },
       function(err, result){
+        err = err || result.errors;
         if(err) {
-          console.log(err);
           return reject(err);
         }
-  
+
+        debug(result);
+
         var desc = result[0].desc;
         var amts =
           desc
