@@ -15,6 +15,7 @@ var GOOG_LOCAL_KEYS = path.join(__dirname, '..', '..', 'config', 'secrets', 'goo
 
 // promisify
 const readFilePromise = promisify(fs.readFile, fs);
+const authPromise = promisify(authorize);
 
 // Load client secrets from a local file.
 var GAuthToken = function setup(options, deps) {
@@ -23,17 +24,16 @@ var GAuthToken = function setup(options, deps) {
   return readFilePromise(GOOG_LOCAL_KEYS)
     .then((content) => {
       obj._creds = JSON.parse(content);
+      return obj._creds;
     })
       // Authorize a client with the loaded credentials, then call the
       // Drive API.
-    .then(() => {
-      return new Promise((res) => obj.authorize(res));
-    })
+    .then((creds) => authPromise(creds))
     .then(() => { return obj; });
 }
 
-GAuthToken.prototype.authorize = function(done) {
-  authorize(this._creds, done);
+GAuthToken.prototype.authorize = function() {
+  return authPromise(this._creds);
 };
 
 module.exports = GAuthToken;
