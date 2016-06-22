@@ -7,7 +7,7 @@ var should = chai.should();
 var testApp = require('./archie-unit');
 
 describe('Google drive Testcases: ', function() {
-  
+
   var tokenService;
   var driveService;
 
@@ -20,11 +20,31 @@ describe('Google drive Testcases: ', function() {
     });
   });
 
-  it('should list files in google drive', function(done) {
-    this.timeout(15000);
+  it('should find folder with Receipts name', function(done) {
     tokenService.authorize(function(auth){
-      driveService.listFiles(auth, done);
+      driveService.findFolderIdFromName(auth, 'Receipts', function(err, result) {
+        console.log(result);
+        done();
+      });
     });
-  });
+  }).timeout(15000);
+
+  it('should list files in google drive', function(done) {
+    tokenService.authorize(function(auth){
+      driveService.findImageFiles(auth, function(err, files) {
+        console.log(files);
+        done();
+      });
+    });
+  }).timeout(15000);
+
+  it('should list files in google drive', function(done) {
+    tokenService.authorize(function(auth){
+      driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk', function(err, files) {
+        console.log(files);
+        done();
+      });
+    });
+  }).timeout(15000);
 
 });

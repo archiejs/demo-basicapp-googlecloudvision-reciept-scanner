@@ -16,7 +16,7 @@ module.exports = function setup(options, deps) {
   auth = deps.GoogleCmdAuth;
   drive = deps.GoogleDrive;
   scanner = deps.ScanReceipt;
-  
+
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -42,15 +42,45 @@ module.exports = function setup(options, deps) {
 
 function getTaskDetailsFromUser() {
   debug('getTaskDetailsFromUser');
+  var now = new Date();
+  var thisMonth = now.getMonth();
+  var thisYear = now.getYear() - 100;
   return Promise.resolve()
-    .then(() => question('What is the month on the reciepts (1-12) : '))
-    .then((month) => { details.month = month; })
-    .then(() => question('What is the year on reciepts (YY) : '))
-    .then((year) => { details.year = year; })
+    .then(() => question(`What is the month on the reciepts (1-12) : [${thisMonth}] `))
+    .then((month) => { details.month = month || thisMonth; })
+    .then(() => question(`What is the year on reciepts (YY) : [${thisYear}] `))
+    .then((year) => { details.year = year || thisYear; })
+    .then(() => question('What is the name of the google drive folder to scan : [Receipts] '))
+    .then((folder) => { details.folderName = folder || 'Receipts' });
 }
 
 function getFilesFromDrive() {
   debug('getFilesFromDrive');
+  return new Promise((resolve, reject) => {
+    drive.findFolderIdFromName(auth, details.folderName, function(err, result){
+      if(err) {
+        return reject(err);
+      }
+      details.folderId = result.shift().id
+      resolve(details.folderId);
+    });
+  })
+  .then((folderId) => {
+    drive.findImageFiles(auth, folderId, function(err, files) {
+      if (err) {
+        throw(err);
+      }
+
+      console.log('Files:');
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        // file url is
+        console.log('%s (%s, %s)', file.name, file.id, file.webViewLink);
+      }
+
+      return(files);
+    });
+  });
 }
 
 function doScanNewReciepts() {
