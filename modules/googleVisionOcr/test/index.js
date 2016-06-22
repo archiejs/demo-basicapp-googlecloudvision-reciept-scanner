@@ -18,22 +18,24 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#test faded pink recipt', function(done){
-    scanner.detectAmountInRecipt('./test/image1.jpg', function(err, result, amount){
-      if(err) return done(err);
+    scanner.detectAmountInRecipt('./test/image1.jpg')
+    .then(({ result, amount }) => {
+      console.log('result:', JSON.stringify(result[0].desc, null, 2));
       should.exist(result, "Result should exist");
       amount.should.equal(38.00, "Incorrect amount");
+      done();
+    })
+    .catch((err) => done(err));
+  });
+
+  it('#test half recipt', function(done){
+    scanner.detectAmountInRecipt('./test/image2.jpg')
+   .then(({result, amount}) => {
       console.log('result:', JSON.stringify(result[0].desc, null, 2));
+      should.exist(result, "Result should exist");
+      amount.should.equal(184.00, "Incorrect amount");
       done();
     });
   });
 
-  it('#test half recipt', function(done){
-    scanner.detectAmountInRecipt('./test/image2.jpg', function(err, result, amount){
-      if (err) return done(err);
-      should.exist(result, "Result should exist");
-      amount.should.equal(184.00, "Incorrect amount");
-      console.log('result:', JSON.stringify(result[0].desc, null, 2));
-      done();
-    });
-  });
 });
