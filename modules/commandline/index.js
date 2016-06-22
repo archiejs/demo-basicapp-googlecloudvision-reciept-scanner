@@ -8,7 +8,6 @@ var auth;
 var drive;
 var scanner;
 var question;
-var details = {};
 
 module.exports = function setup(options, deps) {
   var obj = this;
@@ -30,11 +29,13 @@ module.exports = function setup(options, deps) {
   // 3. Prepare list of files to scan
   // 4. Prepare an output.txt in the same folder
 
+  // a json `details` is used to pass values between functions in this promise structure
   let result =
     new Promise((resolve) => auth.authorize(resolve))
     .then((_auth) => { auth = _auth; })
-    .then(() => getTaskDetailsFromUser())
-    .then(() => getFilesFromDrive())
+    .then(getTaskDetailsFromUser) // adds month, year and folder name to details
+    .then(getFilesFromDrive)  // adds folder id and files to details
+    .then(doScanNewReceipts) // scans new receipts
     .then(() => { return obj; })
 
   return result;
@@ -42,6 +43,7 @@ module.exports = function setup(options, deps) {
 
 function getTaskDetailsFromUser() {
   debug('getTaskDetailsFromUser');
+  var details = {};
   var now = new Date();
   var thisMonth = now.getMonth();
   var thisYear = now.getYear() - 100;
@@ -51,40 +53,37 @@ function getTaskDetailsFromUser() {
     .then(() => question(`What is the year on reciepts (YY) : [${thisYear}] `))
     .then((year) => { details.year = year || thisYear; })
     .then(() => question('What is the name of the google drive folder to scan : [Receipts] '))
-    .then((folder) => { details.folderName = folder || 'Receipts' });
+    .then((folder) => { details.folderName = folder || 'Receipts' })
+    .then(() => { return details; })
+    .catch(err => { console.error(err); process.exit(-1);});
 }
 
-function getFilesFromDrive() {
+function getFilesFromDrive(details) {
   debug('getFilesFromDrive');
-  return new Promise((resolve, reject) => {
-    drive.findFolderIdFromName(auth, details.folderName, function(err, result){
-      if(err) {
-        return reject(err);
-      }
-      details.folderId = result.shift().id
-      resolve(details.folderId);
-    });
+  return drive.findFolderIdFromName(auth, details.folderName)
+  .then(result => {
+    details.folderId = result.shift().id
+    return details.folderId;
   })
-  .then((folderId) => {
-    drive.findImageFiles(auth, folderId, function(err, files) {
-      if (err) {
-        throw(err);
-      }
-
-      console.log('Files:');
-      for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        // file url is
-        console.log('%s (%s, %s)', file.name, file.id, file.webViewLink);
-      }
-
-      return(files);
-    });
+  .then((folderId) => drive.findImageFiles(auth, folderId))
+  .then(files => {
+    details.files = files;
+    debug(`Files: ${files}`);
+    return details.files;
   });
 }
 
-function doScanNewReciepts() {
+function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
+  var files = details.files.slice(0,1);
+  return Promise.all(
+    files.map(file => vision.detectAmountInRecipt(file))
+  )
+  .then(contents => {
+    console.log(contents.result);
+    console.log('--------');
+    console.log(contents.amount);
+  });
 }
 
 function doPrepareReport() {
