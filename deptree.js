@@ -4,11 +4,11 @@ var config = require('./config/env');
 
 // individual modules
 
-exports.googleAuth = "modules/googleAuth";
+exports.googleAuth = "modules/googleauth";
 
-exports.googleDrive = "modules/googleDrive";
+exports.googleDrive = "modules/googledrive";
 
-exports.googleVision = "modules/googleVisionOcr";
+exports.googleVision = "modules/googlevisionOcr";
 
 exports.commandline = "modules/commandline";
 
