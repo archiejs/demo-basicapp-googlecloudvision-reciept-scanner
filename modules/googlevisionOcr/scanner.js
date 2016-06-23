@@ -9,16 +9,16 @@ var ScanDoc = function(options, deps) {
   this.vision = gcloud.vision();
 }
 
-ScanDoc.prototype.detectAmountInRecipt = function(images) {
+ScanDoc.prototype.detectAmountInRecipt = function(image) {
   // Make a call to the Vision API to detect the labels
   
   return new Promise((resolve, reject) => {
-    debug(`scan ${images}`);
+    debug(`scan ${image}`);
   
-    this.vision.detectText(images, { verbose: true }, // adds description field in result
+    this.vision.detectText(image, { verbose: true }, // adds description field in result
       function(err, result){
         if(err || result.errors.length > 0) {
-          return reject(err || result.errors);
+          return reject(err || result.errors[0]);
         }
 
         var desc = result[0].desc;
