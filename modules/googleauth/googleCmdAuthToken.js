@@ -9,7 +9,10 @@ const debug = require('debug')('demo-archiejs-googleauth');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/drive-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
+var SCOPES = [
+  'https://www.googleapis.com/auth/drive.metadata.readonly',
+  'https://www.googleapis.com/auth/drive.readonly'
+];
 var TOKEN_PATH = '.drive-nodejs-quickstart.json';
 var GOOG_LOCAL_KEYS = path.join(__dirname, '..', '..', 'config', 'secrets', 'google-local.json');
 
