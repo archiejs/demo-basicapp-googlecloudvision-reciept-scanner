@@ -21,6 +21,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "fs": "0.0.2",
     "googleapis": "^8.2.0"
   }
 }

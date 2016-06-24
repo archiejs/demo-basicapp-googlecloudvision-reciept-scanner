@@ -1,9 +1,12 @@
 'use strict';
 
 const google = require('googleapis');
-const googleAuth = require('google-auth-library');
-const promisify = require('es6-promisify');
 const service = google.drive('v3');
+
+const promisify = require('es6-promisify');
+const fs = require('fs');
+
+const request = require('request');
 const debug = require('debug')('demo-archiejs-gdrive');
 
 const filesQuery = promisify(service.files.list, service.files);
@@ -54,3 +57,37 @@ GDrive.prototype.findFolderIdFromName = function(auth, name) {
   
   return filesQuery(query);
 }
+
+GDrive.prototype.getFileContent = function(auth, fileIds) {
+  if (typeof fileIds === 'string') {
+    fileIds = [ fileIds ];
+  }
+
+  return Promise.all(
+    fileIds.map(fileId => {
+      return new Promise((resolve, reject) => {
+        const filename = `/tmp/${fileId}`;
+        const dest = fs.createWriteStream(filename);
+
+        debug(`download started ${fileId}`);
+
+        service.files.get({
+          auth,
+          fileId: fileId,
+          alt: 'media'
+        })
+        .on('end', function() {
+          debug(`download complete ${fileId}`);
+          resolve(filename);
+        })
+        .on('error', function(err) {
+          debug(`download error ${fileId}`);
+          reject(err);
+        })
+        .pipe(dest);
+
+      });
+    })
+  );
+}
+

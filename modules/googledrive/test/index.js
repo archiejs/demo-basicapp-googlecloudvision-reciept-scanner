@@ -57,4 +57,13 @@ describe('Google drive Testcases: ', function() {
       });
   }).timeout(15000);
 
+  it('should download file to /tmp folder from google drive', function(done) {
+    tokenService.authorize()
+      .then((auth) => driveService.getFileContent(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
+      .then((file) => {
+        console.log(file);
+      })
+      .then(done, done); // ok, error
+  });
+
 });
