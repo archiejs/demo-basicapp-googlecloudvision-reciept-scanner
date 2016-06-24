@@ -12,7 +12,7 @@ describe('Google drive Testcases: ', function() {
   var driveService;
 
   before(function(done){
-    this.timeout(15000);
+    this;
     testApp(function(err, archie) {
       tokenService = archie.getService("GoogleCmdAuth");
       driveService = archie.getService("GoogleDrive");
@@ -27,35 +27,27 @@ describe('Google drive Testcases: ', function() {
       })
       .then(result => {
         console.log(result);
-        done();
-      });
-  }).timeout(15000);
+      })
+      .then(done, done); // ok, error
+  });
 
   it('should list files in google drive', function(done) {
     tokenService.authorize()
       .then(driveService.findImageFiles)
       .then((files) => {
         console.log(files);
-        done();
       })
-      .catch(err => {
-        console.log(err);
-        process.exit(-1);
-      });
-  }).timeout(15000);
+      .then(done, done); // ok, error
+  });
 
   it('should list files in Receipt folder in google drive', function(done) {
     tokenService.authorize()
       .then((auth) => driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
       .then((files) => {
         console.log(files);
-        done();
       })
-      .catch(err => {
-        console.log(err);
-        process.exit(-1);
-      });
-  }).timeout(15000);
+      .then(done, done); // ok, error
+  });
 
   it('should download file to /tmp folder from google drive', function(done) {
     tokenService.authorize()
