@@ -6,7 +6,6 @@ const servicev2 = google.drive('v2');
 
 const promisify = require('es6-promisify');
 const fs = require('fs');
-
 const request = require('request');
 const debug = require('debug')('demo-archiejs-gdrive');
 
@@ -58,7 +57,17 @@ GDrive.prototype.findFolderIdFromName = function(auth, name) {
   return filesQuery(query);
 }
 
+/**
+ * It caches the files in /tmp folder.
+ *
+ * @{params} auth - the google auth object
+ * @{params} fileIds - id's of files to be downloaded
+ *
+ */
+
 GDrive.prototype.getFileContent = function(auth, fileIds) {
+  debug("getFileContent");
+
   if (typeof fileIds === 'string') {
     fileIds = [ fileIds ];
   }
@@ -67,24 +76,29 @@ GDrive.prototype.getFileContent = function(auth, fileIds) {
     fileIds.map(fileId => {
       return new Promise((resolve, reject) => {
         const filename = `/tmp/${fileId}`;
-        const dest = fs.createWriteStream(filename);
-
-        debug(`download started ${fileId}`);
-
-        servicev2.files.get({
-          auth,
-          fileId,
-          alt: 'media'
-        })
-        .on('end', function() {
-          debug(`download complete ${fileId}`);
-          resolve(filename);
-        })
-        .on('error', function(err) {
-          debug(`download error ${fileId}`);
-          reject(err);
-        })
-        .pipe(dest);
+        fs.exists(filename, function(exists) {
+          if (exists) {
+            debug(`cached ${fileId}`);
+            resolve(filename);
+          } else {
+            debug(`download started ${fileId}`);
+            const dest = fs.createWriteStream(filename);
+            servicev2.files.get({
+              auth,
+              fileId,
+              alt: 'media'
+            })
+            .on('end', function() {
+              debug(`download complete ${fileId}`);
+              resolve(filename);
+            })
+            .on('error', function(err) {
+              debug(`download error ${fileId}`);
+              reject(err);
+            })
+            .pipe(dest);
+          }
+        });
 
       });
     })

@@ -59,8 +59,8 @@ function getTaskDetailsFromUser() {
   return Promise.resolve()
     .then(() => question(`What is the month on the reciepts (1-12) : [${thisMonth}] `))
     .then((month) => { details.month = month || thisMonth; })
-    .then(() => question(`What is the year on reciepts (YY) : [${thisYear}] `))
-    .then((year) => { details.year = year || thisYear; })
+    //.then(() => question(`What is the year on reciepts (YY) : [${thisYear}] `))
+    //.then((year) => { details.year = year || thisYear; })
     .then(() => question('What is the name of the google drive folder to scan : [Receipts] '))
     .then((folder) => { details.folderName = folder || 'Receipts' })
     .then(() => { return details; })
@@ -78,20 +78,46 @@ function getFilesFromDrive(details) {
   .then(page => {
     details.files = page.files;
     debug(`Found ${page.files.length} files`);
-    return details.files.map(item => item.webViewLink);
+    return details.files.map(item => item.id);
   });
 }
 
 function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
-  var files = files.slice(0,1); // try scanning one
-  return Promise.all(
-    files.map(file => scanner.detectAmountInRecipt(file))
-  )
-  .then(contents => {
-    console.log(contents.result);
-    console.log('--------');
-    console.log(contents.amount);
+
+  return drive.getFileContent(auth, files)
+  .then(tmpfiles => {
+    return Promise.all(
+      tmpfiles.map(path => scanner.detectAmountInRecipt(path))
+    )
+  })
+  .then(scans => {
+    // add id's to scans
+    for(let idx in scans) {
+      scans[idx].fileId = files[idx];
+    }
+
+    // separate into good and bad scans
+    let goodScans = scans.filter(item => { return item.amount != undefined; });
+    let badScans = scans.filter(item => { return item.amount == undefined; });
+
+    let item, id, title, amount, content;
+
+    console.log("\n\nGood Scans:-\n");
+    for(item of goodScans) {
+      id = item.id;
+      title = item.result[0].desc.slice(0, 15);
+      amount = item.amount;
+      console.log(`${id} \t\t ${title} \t\t ${amount}`);
+    }
+
+    console.log("\n\nBad Scans:-\n");
+    for(item of badScans) {
+      id = item.id;
+      content = item.result[0].desc;
+      console.log(`${id} \t\t ${content}`);
+    }
+
   });
 }
 
