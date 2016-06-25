@@ -32,7 +32,7 @@ GDrive.prototype.findImageFiles = function(auth, folderId) {
   var q = "mimeType='image/jpeg'";
   if (folderId) {
     // look inside a specific folder
-    q = `'${folderId}' in parents and ${q}`;
+    q = `"${folderId}" in parents and ${q}`;
   }
 
   var query = {
@@ -52,10 +52,9 @@ GDrive.prototype.findFolderIdFromName = function(auth, name) {
 
   var query = {
     auth,
-    q,
-    fields: "files(id, name, webViewLink)"
+    q
   }
-  
+
   return filesQuery(query);
 }
 

@@ -24,7 +24,7 @@ describe('Google drive Testcases: ', function() {
   it('should find folder with Receipts name', function(done) {
     tokenService.authorize()
       .then((auth) => {
-        driveService.findFolderIdFromName(auth, 'Receipts');
+        return driveService.findFolderIdFromName(auth, 'Receipts');
       })
       .then(result => {
         debug(result);
@@ -46,8 +46,13 @@ describe('Google drive Testcases: ', function() {
       .then((auth) => driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
       .then((files) => {
         debug(files);
+        done();
+      }, function(err) {
+        debug("error");
+        debug(err);
+        done(err);
       })
-      .then(done, done); // ok, error
+      //.then(done, done); // ok, error
   });
 
   it('should download file to /tmp folder from google drive', function(done) {
