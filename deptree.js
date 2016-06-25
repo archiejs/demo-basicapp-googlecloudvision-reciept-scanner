@@ -12,6 +12,8 @@ exports.googleVision = "modules/googlevisionOcr";
 
 exports.commandline = "modules/commandline";
 
+exports.caches = "modules/caches";
+
 /*
  * Common modules are common across sub-projects.
  * Ex: db module, analytics module are contendors.
@@ -42,7 +44,8 @@ exports.commandline =
     exports.googleAuth,
     exports.googleDrive,
     exports.googleVision,
-    exports.commandline
+    exports.commandline,
+    exports.caches
   ];
 
 

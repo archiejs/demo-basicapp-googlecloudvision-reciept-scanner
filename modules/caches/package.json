@@ -1,0 +1,15 @@
+{
+  "name": "caches",
+  "version": "1.0.0",
+  "description": "",
+  "plugin": {
+    "provides": {
+      "FileCache": "filecache.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

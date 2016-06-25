@@ -4,20 +4,22 @@ const readline = require('readline');
 const promisify = require('es6-promisify');
 const debug = require('debug')('demo-archiejs-cmdline');
 
-var auth;
-var drive;
-var scanner;
-var question;
+let auth;
+let drive;
+let scanner;
+let cache;
+let question;
 
 module.exports = function setup(options, deps) {
   debug('commandline init');
-  var obj = this;
+  const obj = this;
 
   auth = deps.GoogleCmdAuth;
   drive = deps.GoogleDrive;
   scanner = deps.ScanReceipt;
+  cache = deps.FileCache;
 
-  var rl = readline.createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
@@ -52,10 +54,10 @@ module.exports = function setup(options, deps) {
 
 function getTaskDetailsFromUser() {
   debug('getTaskDetailsFromUser');
-  var details = {};
-  var now = new Date();
-  var thisMonth = now.getMonth();
-  var thisYear = now.getYear() - 100;
+  let details = {};
+  const now = new Date();
+  const thisMonth = now.getMonth();
+  const thisYear = now.getYear() - 100;
   return Promise.resolve()
     .then(() => question(`What is the month on the reciepts (1-12) : [${thisMonth}] `))
     .then((month) => { details.month = month || thisMonth; })
@@ -69,6 +71,8 @@ function getTaskDetailsFromUser() {
 
 function getFilesFromDrive(details) {
   debug('getFilesFromDrive');
+  let files = [];
+
   return drive.findFolderIdFromName(auth, details.folderName)
   .then(result => {
     details.folderId = result.id
@@ -78,47 +82,48 @@ function getFilesFromDrive(details) {
   .then(page => {
     details.files = page.files;
     debug(`Found ${page.files.length} files`);
-    return details.files.map(item => item.id);
-  });
+    files = details.files.map(item => item.id);
+  })
+  .then(() => {
+    return cache.syncNotCached(files, (id) => drive.getFileContent(auth, id));
+  })
+  .then(() => { return files; });
 }
 
 function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
 
-  return drive.getFileContent(auth, files)
-  .then(tmpfiles => {
-    return Promise.all(
-      tmpfiles.map(path => scanner.detectAmountInRecipt(path))
-    )
-  })
-  .then(scans => {
-    // add id's to scans
-    for(let idx in scans) {
-      scans[idx].fileId = files[idx];
-    }
+  let tmpfiles = files.map(id => cache.getLocation(id));
 
-    // separate into good and bad scans
-    let goodScans = scans.filter(item => { return item.amount != undefined; });
-    let badScans = scans.filter(item => { return item.amount == undefined; });
+  return Promise.all( tmpfiles.map(path => scanner.detectAmountInRecipt(path)) )
+    .then(scans => {
+      // add id's to scans
+      for(let idx in scans) {
+        scans[idx].fileId = files[idx];
+      }
 
-    let item, id, title, amount, content;
+      // separate into good and bad scans
+      let goodScans = scans.filter(item => { return item.amount != undefined; });
+      let badScans = scans.filter(item => { return item.amount == undefined; });
 
-    console.log("\n\nGood Scans:-\n");
-    for(item of goodScans) {
-      id = item.id;
-      title = item.result[0].desc.slice(0, 15);
-      amount = item.amount;
-      console.log(`${id} \t\t ${title} \t\t ${amount}`);
-    }
+      let item, id, title, amount, content;
 
-    console.log("\n\nBad Scans:-\n");
-    for(item of badScans) {
-      id = item.id;
-      content = item.result[0].desc;
-      console.log(`${id} \t\t ${content}`);
-    }
+      console.log("\n\nGood Scans:-\n");
+      for(item of goodScans) {
+        id = item.id;
+        title = item.result[0].desc.slice(0, 15);
+        amount = item.amount;
+        console.log(`${id} \t\t ${title} \t\t ${amount}`);
+      }
 
-  });
+      console.log("\n\nBad Scans:-\n");
+      for(item of badScans) {
+        id = item.id;
+        content = item.result[0].desc;
+        console.log(`${id} \t\t ${content}`);
+      }
+
+    });
 }
 
 function doPrepareReport() {

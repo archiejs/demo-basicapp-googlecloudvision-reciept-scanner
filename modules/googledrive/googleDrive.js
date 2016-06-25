@@ -75,31 +75,24 @@ GDrive.prototype.getFileContent = function(auth, fileIds) {
   return Promise.all(
     fileIds.map(fileId => {
       return new Promise((resolve, reject) => {
-        const filename = `/tmp/${fileId}`;
-        fs.exists(filename, function(exists) {
-          if (exists) {
-            debug(`cached ${fileId}`);
-            resolve(filename);
-          } else {
-            debug(`download started ${fileId}`);
-            const dest = fs.createWriteStream(filename);
-            servicev2.files.get({
-              auth,
-              fileId,
-              alt: 'media'
-            })
-            .on('end', function() {
-              debug(`download complete ${fileId}`);
-              resolve(filename);
-            })
-            .on('error', function(err) {
-              debug(`download error ${fileId}`);
-              reject(err);
-            })
-            .pipe(dest);
-          }
-        });
-
+        debug(`download started ${fileId}`);
+        let content = '';
+        servicev2.files.get({
+          auth,
+          fileId,
+          alt: 'media'
+        })
+        .on('end', () => {
+          debug(`download complete ${fileId}`);
+          resolve(content);
+        })
+        .on('data', (chunk) => {
+          content += chunk;
+        })
+        .on('error', (err) => {
+          debug(`download error ${fileId}`);
+          reject(err);
+        })
       });
     })
   );
