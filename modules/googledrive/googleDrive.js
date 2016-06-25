@@ -1,7 +1,8 @@
 'use strict';
 
 const google = require('googleapis');
-const service = google.drive('v3');
+const servicev3 = google.drive('v3');
+const servicev2 = google.drive('v2');
 
 const promisify = require('es6-promisify');
 const fs = require('fs');
@@ -9,7 +10,7 @@ const fs = require('fs');
 const request = require('request');
 const debug = require('debug')('demo-archiejs-gdrive');
 
-const filesQuery = promisify(service.files.list, service.files);
+const filesQuery = promisify(servicev3.files.list, servicev3.files);
 
 let GDrive = module.exports = function(config, deps) {
 };
@@ -71,9 +72,9 @@ GDrive.prototype.getFileContent = function(auth, fileIds) {
 
         debug(`download started ${fileId}`);
 
-        service.files.get({
+        servicev2.files.get({
           auth,
-          fileId: fileId,
+          fileId,
           alt: 'media'
         })
         .on('end', function() {

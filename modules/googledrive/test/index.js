@@ -3,6 +3,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
+const debug = require('debug')('demo-archiejs-gdrive-test');
 
 var testApp = require('./archie-unit');
 
@@ -26,7 +27,7 @@ describe('Google drive Testcases: ', function() {
         driveService.findFolderIdFromName(auth, 'Receipts');
       })
       .then(result => {
-        console.log(result);
+        debug(result);
       })
       .then(done, done); // ok, error
   });
@@ -35,7 +36,7 @@ describe('Google drive Testcases: ', function() {
     tokenService.authorize()
       .then(driveService.findImageFiles)
       .then((files) => {
-        console.log(files);
+        debug(files);
       })
       .then(done, done); // ok, error
   });
@@ -44,16 +45,16 @@ describe('Google drive Testcases: ', function() {
     tokenService.authorize()
       .then((auth) => driveService.findImageFiles(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
       .then((files) => {
-        console.log(files);
+        debug(files);
       })
       .then(done, done); // ok, error
   });
 
   it('should download file to /tmp folder from google drive', function(done) {
     tokenService.authorize()
-      .then((auth) => driveService.getFileContent(auth, '0B6AH_WUpS8TnQ0pXc3hmZDQxWkk'))
+      .then((auth) => driveService.getFileContent(auth, '0B6AH_WUpS8TnbGFHaWZuOEtMM2M'))
       .then((file) => {
-        console.log(file);
+        debug(file);
       })
       .then(done, done); // ok, error
   });
