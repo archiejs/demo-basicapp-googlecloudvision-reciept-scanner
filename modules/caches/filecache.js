@@ -28,17 +28,10 @@ FC.prototype.exists = function(id) {
         resolve(file);
       } else {
         debug(`not found ${file}`);
-        reject();
+        reject(file);
       }
     });
   });
-}
-
-FC.prototype.putStream = function(id) {
-  debug(`putStream ${id}`);
-  let file = `/tmp/${id}`;
-  const dest = fs.createWriteStream(filename);
-  return dest;
 }
 
 FC.prototype.put = function(id, data) {
@@ -64,12 +57,7 @@ FC.prototype.syncNotCached = function(ids, syncPromiseFn) {
         let hit = false;
         return cache.exists(id)
           .then(() => { hit = true; }) // found key
-          .catch(() => syncPromiseFn(id)) // not found ... sync
-          .then(content => {
-            if(!hit) {
-              return cache.put(id, content);
-            }
-          });
+          .catch((file) => syncPromiseFn(id, file)); // not found ... sync
       }
     )
   );

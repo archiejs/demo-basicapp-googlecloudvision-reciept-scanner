@@ -61,22 +61,27 @@ GDrive.prototype.findFolderIdFromName = function(auth, name) {
  * It caches the files in /tmp folder.
  *
  * @{params} auth - the google auth object
- * @{params} fileIds - id's of files to be downloaded
+ * @{params} ids - id's of files to be downloaded
+ * @{params} paths - new paths of files to be downloaded
  *
  */
 
-GDrive.prototype.getFileContent = function(auth, fileIds) {
+GDrive.prototype.getFileContent = function(auth, ids, paths) {
   debug("getFileContent");
 
-  if (typeof fileIds === 'string') {
-    fileIds = [ fileIds ];
+  if (typeof ids === 'string') {
+    ids = [ ids ];
+    paths = [ paths ];
   }
 
   return Promise.all(
-    fileIds.map(fileId => {
+    ids.map((fileId, idx) => {
       return new Promise((resolve, reject) => {
-        debug(`download started ${fileId}`);
-        let content = '';
+        let filename = paths[idx];
+        let dest = fs.createWriteStream(filename);
+        
+        debug(`download started ${fileId} to ${filename}`);
+
         servicev2.files.get({
           auth,
           fileId,
@@ -84,15 +89,13 @@ GDrive.prototype.getFileContent = function(auth, fileIds) {
         })
         .on('end', () => {
           debug(`download complete ${fileId}`);
-          resolve(content);
-        })
-        .on('data', (chunk) => {
-          content += chunk;
+          resolve(filename);
         })
         .on('error', (err) => {
           debug(`download error ${fileId}`);
           reject(err);
         })
+        .pipe(dest);
       });
     })
   );

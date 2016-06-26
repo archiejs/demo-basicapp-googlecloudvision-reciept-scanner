@@ -85,7 +85,7 @@ function getFilesFromDrive(details) {
     files = details.files.map(item => item.id);
   })
   .then(() => {
-    return cache.syncNotCached(files, (id) => drive.getFileContent(auth, id));
+    return cache.syncNotCached(files, (id, dest) => drive.getFileContent(auth, id, dest));
   })
   .then(() => { return files; });
 }
