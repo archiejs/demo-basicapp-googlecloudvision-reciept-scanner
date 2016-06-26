@@ -62,14 +62,16 @@ function authorize(credentials, callback) {
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
-    if (err) {
-      debug('get a new token');
-      getNewToken(oauth2Client, callback);
-    } else {
+    if (token) {
       debug('reuse the old token');
       oauth2Client.credentials = JSON.parse(token);
-      callback(null, oauth2Client);
+      if (Date.now() < oauth2Client.credentials.expiry_date) {
+        return callback(null, oauth2Client);
+      }
+      debug('old token expired');
     }
+    debug('get a new token');
+    getNewToken(oauth2Client, callback);
   });
 }
 
@@ -100,8 +102,9 @@ function getNewToken(oauth2Client, callback) {
         return callback(err);
       }
       oauth2Client.credentials = token;
-      storeToken(token);
-      callback(null, oauth2Client);
+      storeToken(token, (err) => {
+        callback(err, oauth2Client);
+      });
     });
   });
 }
@@ -111,7 +114,6 @@ function getNewToken(oauth2Client, callback) {
  *
  * @param {Object} token The token to store to disk.
  */
-function storeToken(token) {
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-  console.log('Token stored to ' + TOKEN_PATH);
+function storeToken(token, done) {
+  fs.writeFile(TOKEN_PATH, JSON.stringify(token), done);
 }
