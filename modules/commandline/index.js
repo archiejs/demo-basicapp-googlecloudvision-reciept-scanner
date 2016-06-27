@@ -7,7 +7,7 @@ const PromisePool = require('es6-promise-pool')
 const debug = require('debug')('demo-archiejs-cmdline');
 
 const downloadConcurrency = 3; // gdrive -> /tmp folder
-const uploadConcurrency = 2; // machine to cloud vision server
+const uploadConcurrency = 1; // machine to cloud vision server
 
 let auth;
 let drive;
@@ -114,8 +114,16 @@ function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
 
   let tmpfiles = files.map(id => cache.getLocation(id));
+  let queue = tmpfiles.map(path => scanner.detectAmountInRecipt(path));
 
-  return Promise.all( tmpfiles.map(path => scanner.detectAmountInRecipt(path)) )
+  let scanNext = function() {
+    debug('scan next');
+    return queue.length && queue.shift();
+  };
+
+  let scanPool = new PromisePool(scanNext, uploadConcurrency);
+
+  return scanPool.start()
     .then(scans => {
       // add id's to scans
       for(let idx in scans) {
