@@ -29,7 +29,7 @@ FC.prototype.exists = function(id) {
 FC.prototype.put = function(id, data) {
   debug(`put ${id}`);
   let file = this.resolveId(id);
-  return fswritePromise(file);
+  return fswritePromise(file, data);
 }
 
 FC.prototype.syncNotCached = function(ids, syncPromiseFn) {
