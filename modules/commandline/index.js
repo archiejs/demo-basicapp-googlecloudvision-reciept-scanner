@@ -166,17 +166,15 @@ function doScanNewReceipts(files) {
 
     console.log("\n\nGood Scans:-\n");
     for(item of goodScans) {
-      id = item.id;
-      title = item.result[0].desc.slice(0, 15);
+      title = item.result[0].desc.slice(0, 30);
       amount = item.amount;
-      console.log(`${id} \t\t ${title} \t\t ${amount}`);
+      console.log(`${title} \t\t ${amount}`);
     }
 
     console.log("\n\nBad Scans:-\n");
     for(item of badScans) {
-      id = item.id;
-      content = item.result[0].desc;
-      console.log(`${id} \t\t ${content}`);
+      content = item.result[0].desc.slice(0,50);
+      console.log(`${content}`);
     }
 
   });
