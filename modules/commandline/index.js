@@ -117,7 +117,7 @@ function doScanNewReceipts(files) {
   let ocrs = {};
   files.forEach((id) => {
     let ocr = `${id}.txt`;
-    let image = cache.getLocation(id);
+    let image = cache.resolveId(id);
     ocrs[ocr] = { image };
   });
 
@@ -144,7 +144,7 @@ function doScanNewReceipts(files) {
   .then(() => { return scanPool.start(); }) // scan files and cache them
   .then(() => {
     // read everything from cache
-    return new Promise.all(Object.keys(ocrs).map(id => cache.get(id))); // read all from cache
+    return Promise.all(Object.keys(ocrs).map(ocr => cache.get(ocr))); // read all from cache
   })
   .then((results) => {
     return results.map(result => JSON.parse(result));

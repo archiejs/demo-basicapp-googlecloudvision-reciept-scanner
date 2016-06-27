@@ -1,51 +1,35 @@
 const fs = require('fs');
+const promisify = require('es6-promisify');
 const debug = require('debug')('demo-archiejs-caches');
+
+const fsreadPromise = promisify(fs.readFile, fs);
+const fswritePromise = promisify(fs.writeFile, fs);
 
 var FC = module.exports = function() {
 }
 
 FC.prototype.get = function(id) {
   debug(`get ${id}`);
+  let file = this.resolveId(id);
   return this.exists(id)
-    .then((file) => {
-      fs.readFile(file, (err, data) => {
-        if (err) {
-          throw err;
-        } else {
-          return data;
-        }
-      });
+    .then(found => {
+      if(found)
+        return fsreadPromise(file);
     });
 }
 
 FC.prototype.exists = function(id) {
-  debug(`check exists ${id}`);
-  let file = `/tmp/${id}`;
-  return new Promise((resolve, reject) => {
-    fs.exists(file, function(exists) {
-      if (exists) {
-        debug(`found ${file}`);
-        resolve(file);
-      } else {
-        debug(`not found ${file}`);
-        reject(file);
-      }
-    });
+  debug(`exists ${id}`);
+  let file = this.resolveId(id);
+  return new Promise(resolve => {
+    fs.exists(file, resolve);
   });
 }
 
 FC.prototype.put = function(id, data) {
   debug(`put ${id}`);
-  let file = `/tmp/${id}`;
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file, data, err => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(file);
-      }
-    })
-  });
+  let file = this.resolveId(id);
+  return fswritePromise(file);
 }
 
 FC.prototype.syncNotCached = function(ids, syncPromiseFn) {
@@ -54,15 +38,17 @@ FC.prototype.syncNotCached = function(ids, syncPromiseFn) {
   return Promise.all(
     ids.map(id =>
       {
-        let hit = false;
         return cache.exists(id)
-          .then(() => { hit = true; }) // found key
-          .catch((file) => syncPromiseFn(id, file)); // not found ... sync
+          .then((exists) => {
+            if (!exists)
+              return syncPromiseFn(id, cache.resolveId(id) ); // not found ... sync
+          });
       }
     )
   );
 }
 
-FC.prototype.getLocation = function(id) {
+// resolve an id to a file
+FC.prototype.resolveId = function(id) {
   return `/tmp/${id}`;
 }
