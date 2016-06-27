@@ -18,7 +18,8 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#test faded pink recipt', function(done){
-    scanner.detectAmountInRecipt('./test/image1.jpg')
+    scanner.detectText('./test/image1.jpg')
+    .then(result => scanner.parseReceipt(result))
     .then(({ result, amount }) => {
       console.log('result:', JSON.stringify(result[0].desc, null, 2));
       should.exist(result, "Result should exist");
@@ -29,8 +30,9 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#test half recipt', function(done){
-    scanner.detectAmountInRecipt('./test/image2.jpg')
-   .then(({result, amount}) => {
+    scanner.detectText('./test/image2.jpg')
+    .then(result => scanner.parseReceipt(result))
+    .then(({result, amount}) => {
       console.log('result:', JSON.stringify(result[0].desc, null, 2));
       should.exist(result, "Result should exist");
       amount.should.equal(184.00, "Incorrect amount");
@@ -39,7 +41,8 @@ describe('Plugin cloudvisionOcr Testcases:', function(){
   });
 
   it('#tests recipt in a link', function(done) {
-    scanner.detectAmountInRecipt("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/ReceiptSwiss.jpg/1024px-ReceiptSwiss.jpg")
+    scanner.detectText("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/ReceiptSwiss.jpg/1024px-ReceiptSwiss.jpg")
+    .then(result => scanner.parseReceipt(result))
     .then(({ result, amount }) => {
       console.log('result:', JSON.stringify(result[0].desc, null, 2));
       should.exist(result, "Result should exist");
