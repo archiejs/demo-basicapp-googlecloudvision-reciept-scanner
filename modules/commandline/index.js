@@ -113,43 +113,73 @@ function getFilesFromDrive(details) {
 function doScanNewReceipts(files) {
   debug('doScanNewReciepts');
 
-  let queue = files.map(id => cache.getLocation(id));
+  // map ocr filename to original id
+  let ocrs = {};
+  files.forEach((id) => {
+    let ocr = `${id}.txt`;
+    let image = cache.getLocation(id);
+    ocrs[ocr] = { image };
+  });
 
+  // scanning in a queue with file cache
+  let queue = [];
   let scanNext = function() {
-    return queue.length && scanner.detectAmountInRecipt(queue.shift());
+    if (queue.length > 0) {
+      let {ocr, image, dest} = queue.shift();
+      return scanner.detectText(image)
+        .then((json) => {
+          let text = JSON.stringify(json, null, 10);
+          return cache.put(ocr, text); // add text to cache
+        });
+    }
   };
 
   let scanPool = new PromisePool(scanNext, uploadConcurrency);
 
-  return scanPool.start()
-    .then(scans => {
-      // add id's to scans
-      for(let idx in scans) {
-        scans[idx].fileId = files[idx];
-      }
+  // put requests in cache
+  return Promise.resolve(Object.keys(ocrs))
+  .then((ocrKeys) => {
+    return cache.syncNotCached(ocrKeys, (ocr, dest) => queue.push( Object.assign({dest, ocr}, ocrs[ocr]) ));
+  })
+  .then(() => { return scanPool.start(); }) // scan files and cache them
+  .then(() => {
+    // read everything from cache
+    return new Promise.all(Object.keys(ocrs).map(id => cache.get(id))); // read all from cache
+  })
+  .then((results) => {
+    return results.map(result => JSON.parse(result));
+  })
+  .then((results) => {
+    return results.map(result => scanner.parseReceipt(result));
+  })
+  .then(scans => {
+    // add id's to scans
+    for(let idx in scans) {
+      scans[idx].fileId = files[idx];
+    }
 
-      // separate into good and bad scans
-      let goodScans = scans.filter(item => { return item.amount != undefined; });
-      let badScans = scans.filter(item => { return item.amount == undefined; });
+    // separate into good and bad scans
+    let goodScans = scans.filter(item => { return item.amount != undefined; });
+    let badScans = scans.filter(item => { return item.amount == undefined; });
 
-      let item, id, title, amount, content;
+    let item, id, title, amount, content;
 
-      console.log("\n\nGood Scans:-\n");
-      for(item of goodScans) {
-        id = item.id;
-        title = item.result[0].desc.slice(0, 15);
-        amount = item.amount;
-        console.log(`${id} \t\t ${title} \t\t ${amount}`);
-      }
+    console.log("\n\nGood Scans:-\n");
+    for(item of goodScans) {
+      id = item.id;
+      title = item.result[0].desc.slice(0, 15);
+      amount = item.amount;
+      console.log(`${id} \t\t ${title} \t\t ${amount}`);
+    }
 
-      console.log("\n\nBad Scans:-\n");
-      for(item of badScans) {
-        id = item.id;
-        content = item.result[0].desc;
-        console.log(`${id} \t\t ${content}`);
-      }
+    console.log("\n\nBad Scans:-\n");
+    for(item of badScans) {
+      id = item.id;
+      content = item.result[0].desc;
+      console.log(`${id} \t\t ${content}`);
+    }
 
-    });
+  });
 }
 
 function doPrepareReport() {
