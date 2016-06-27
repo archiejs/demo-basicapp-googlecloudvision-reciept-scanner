@@ -2,7 +2,12 @@
 
 const readline = require('readline');
 const promisify = require('es6-promisify');
+const PromisePool = require('es6-promise-pool')
+
 const debug = require('debug')('demo-archiejs-cmdline');
+
+const downloadConcurrency = 3; // gdrive -> /tmp folder
+const uploadConcurrency = 2; // machine to cloud vision server
 
 let auth;
 let drive;
@@ -72,6 +77,20 @@ function getTaskDetailsFromUser() {
 function getFilesFromDrive(details) {
   debug('getFilesFromDrive');
   let files = [];
+  let queue = [];
+
+  // rate limiting sync promises - queue
+
+  let syncNext = function() {
+    if (queue.length > 0) {
+      let {id, dest} = queue.shift();
+      return drive.getFileContent(auth, id, dest);
+    }
+  };
+
+  let syncPool = new PromisePool(syncNext, downloadConcurrency);
+
+  // normal execution flow
 
   return drive.findFolderIdFromName(auth, details.folderName)
   .then(result => {
@@ -85,8 +104,9 @@ function getFilesFromDrive(details) {
     files = details.files.map(item => item.id);
   })
   .then(() => {
-    return cache.syncNotCached(files, (id, dest) => drive.getFileContent(auth, id, dest));
+    return cache.syncNotCached(files, (id, dest) => queue.push( { id, dest } )); // queue up files to be downloaded
   })
+  .then(() => { return syncPool.start(); }) // download files
   .then(() => { return files; });
 }
 
