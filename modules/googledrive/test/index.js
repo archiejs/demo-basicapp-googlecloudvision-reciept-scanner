@@ -57,7 +57,7 @@ describe('Google drive Testcases: ', function() {
 
   it('should download file to /tmp folder from google drive', function(done) {
     tokenService.authorize()
-      .then((auth) => driveService.getFileContent(auth, '0B6AH_WUpS8TnbGFHaWZuOEtMM2M'))
+      .then((auth) => driveService.getFileContent(auth, '0B6AH_WUpS8TnbGFHaWZuOEtMM2M', '/tmp/0B6AH_WUpS8TnbGFHaWZuOEtMM2M'))
       .then((file) => {
         debug(file);
       })
