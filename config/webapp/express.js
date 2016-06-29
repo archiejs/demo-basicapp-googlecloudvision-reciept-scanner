@@ -66,6 +66,9 @@ module.exports.initMiddleware = function (app) {
     app.locals.cache = 'memory';
   }
 
+  app.set('view engine', 'express');
+  app.set('views', path.join('frontend', 'views'));
+
   // Request body parsing middleware should be above methodOverride
   app.use(bodyParser.urlencoded({
     extended: true
@@ -120,9 +123,18 @@ module.exports.initHelmetHeaders = function (app) {
 };
 
 /**
- * Configure the modules server routes
+ * Configure the modules static routes
  */
-module.exports.initModulesServerRoutes = function (app) {
+
+module.exports.initModulesClientRoutes = function (app) {
+  // Setting the app router and static folder
+  app.use('/', express.static(path.resolve('./frontend/public')));
+};
+
+/**
+ * Configure the routes
+ */
+module.exports.initRoutes = function (app) {
     config.files.routes.forEach( function(jsfile){
         require( path.resolve(process.cwd(), 'config', 'routes', jsfile) ) (app); // setup routes
     });
@@ -160,8 +172,11 @@ module.exports.init = function () {
   // Initialize Helmet security headers
   this.initHelmetHeaders(app);
 
-  // Initialize modules server routes
-  this.initModulesServerRoutes(app);
+  // Initialize client routes
+  this.initModulesClientRoutes(app);
+
+  // Initialize routes
+  this.initRoutes(app);
 
   // Initialize error routes
   this.initErrorRoutes(app);

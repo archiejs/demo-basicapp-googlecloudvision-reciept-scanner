@@ -29,17 +29,12 @@ exports.common = [
 
 // main app
 
-exports.app = 
-  [
-    exports.googleAuth,
-    exports.googleDrive,
-    exports.googleVision
-  ]
+exports.app = []
   .concat(exports.common);
 
 // a command line version
 
-exports.commandline = 
+exports.scannerapp = 
   [
     exports.googleAuth,
     exports.googleDrive,

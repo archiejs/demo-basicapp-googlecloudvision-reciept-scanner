@@ -2,6 +2,6 @@
 
 module.exports = [
     'ver1',
-    'test'
+    'views'
 ];
 
