@@ -1,1 +1,1 @@
-Recipt scanning server
+Reciept scanning server
