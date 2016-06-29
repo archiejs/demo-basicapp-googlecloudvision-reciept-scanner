@@ -1,5 +1,3 @@
 'use strict';
 
-// register enhancers
-
-require('archiejs-mongo-enhancer');
+// register enhancers here (if using any)
