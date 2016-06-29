@@ -23,9 +23,5 @@ Archie.createApp(tree, function(err, archie) {
         throw err;
     }
 
-    if ( hasApis ) {
-        require('./config/webapp/index').startApp(archie);
-    }
-
     require('./config/common/welcome');
 });

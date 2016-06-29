@@ -11,9 +11,4 @@ var defaultConfig = require('./default');
 // Merge config files
 var appConfig = _.merge(defaultConfig, envConfig);
 
-// Get files (ex. routes)
-appConfig.files = {
-    routes: require('./../routes')
-};
-
 module.exports = appConfig;
