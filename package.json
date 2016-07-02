@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "./node_modules/.bin/mochas test",
+    "setup": "./scripts/setup.sh",
     "list": "./scripts/list_all_modules.sh"
   },
   "license": "ISC",
