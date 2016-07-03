@@ -1,4 +1,7 @@
+'use strict';
+
 const fs = require('fs');
+const os = require('os');
 const readline = require('readline');
 const google = require('googleapis');
 const googleAuth = require('google-auth-library');
@@ -7,11 +10,10 @@ const path = require('path');
 const promisify = require('es6-promisify');
 const debug = require('debug')('demo-archiejs-googleauth');
 
-// If modifying these scopes, delete your previously saved credentials
-// at ~/.credentials/drive-nodejs-quickstart.json
-var SCOPES;
+// if modifying the SCOPES, you will need to delete the file in TOKEN_PATH location
 var TOKEN_PATH = path.join(os.tmpdir(), '.drive-nodejs-quickstart.json');
-var GOOG_LOCAL_KEYS = path.join(__dirname, '..', '..', 'config', 'secrets', 'google-local.json');
+var SCOPES;
+var GOOG_LOCAL_KEYS;
 
 // promisify
 const readFilePromise = promisify(fs.readFile, fs);
@@ -22,6 +24,7 @@ var GAuthToken = function setup(options, deps) {
   var obj = this;
 
   SCOPES = options.scopes;
+  GOOG_LOCAL_KEYS = options.credentials;
 
   return readFilePromise(GOOG_LOCAL_KEYS)
     .then((content) => {

@@ -5,15 +5,12 @@
 // Use it for your API keys, passwords, etc.
 
 const join = require('path').join;
-const gconf = require('./../secrets/scanapp-credentials.json');
 
 module.exports = {
   // google settings
   google: {
-    clientID: gconf.web.client_id,
-    clientSecret: gconf.web.client_secret,
-    projectId: gconf.web.project_id,
-    callbackURL: gconf.web.redirect_uris[0],
+    projectId: 'receiptscanner',
+    credentials: join(__dirname, '..', 'secrets', 'scanapp-creds.json'),
     keyFilename: join(__dirname, '..', 'secrets', 'scanapp-pkey.json'),
     scopes: [
       'https://www.googleapis.com/auth/drive.metadata.readonly',

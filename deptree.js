@@ -6,6 +6,7 @@ var config = require('./config/env');
 
 exports.googleAuth = {
   packagePath: "modules/googleauth",
+  credentials: config.google.credentials,
   scopes: config.google.scopes
 };
 
