@@ -1,10 +1,7 @@
 'use strict';
 
-var join = require('path').join;
-
-var gconf = require('./../secrets/google-local.json');
-
 module.exports = {
+
   app: {
     title: 'Google recipt scanner',
     description: 'Scan recipts in google drive and write to google spreadsheet'
@@ -16,14 +13,6 @@ module.exports = {
     httpOnly: true,
     secure: false
   },
-  sessionSecret: process.env.SESSION_SECRET || 'youshouldchangethistosomethingsecret',
+  sessionSecret: process.env.SESSION_SECRET || 'youshouldchangethistosomethingsecret'
 
-  // google settings
-  google: {
-    clientID: gconf.web.client_id,
-    clientSecret: gconf.web.client_secret,
-    projectId: gconf.web.project_id,
-    callbackURL: gconf.web.redirect_uris[0],
-    keyFilename: join(__dirname, '..', 'secrets', 'recieptscanner-private.json')
-  }
 };
