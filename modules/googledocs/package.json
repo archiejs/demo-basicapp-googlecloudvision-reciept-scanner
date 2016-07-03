@@ -1,0 +1,24 @@
+{
+  "name": "googleDocs",
+  "version": "1.0.0",
+  "description": "Access google docs for creating a spreadsheet.",
+  "plugin": {
+    "provides": {
+      "GoogleDocs": "googleDocs.js"
+    },
+    "consumes": []
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test --no-timeouts"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "google-auth-library": "^0.9.8",
+    "googleapis": "^8.2.0"
+  }
+}
