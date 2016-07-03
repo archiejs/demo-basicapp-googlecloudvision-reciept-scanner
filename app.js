@@ -2,13 +2,11 @@
 
 var Archie = require('archiejs');
 require('./config/common/enhancers.js'); // Load all enhancers
-var hasApis = (!process.argv[2]) || (process.argv[2] === 'app');
 
 // Load the app's dependency tree
 
 var deptree = require('./deptree');
-var theApp = process.argv[2] || 'app';
-var theAppTree = deptree[theApp];
+var theAppTree = deptree.app;
 
 if(!Array.isArray(theAppTree)) {
   throw new Error(theApp + ' config does not export an ARRAY.')
@@ -24,4 +22,5 @@ Archie.createApp(tree, function(err, archie) {
     }
 
     require('./config/common/welcome');
+    process.exit(0);
 });

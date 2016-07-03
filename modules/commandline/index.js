@@ -170,13 +170,13 @@ function doScanNewReceipts(files) {
     for(item of goodScans) {
       title = item.result[0].desc.slice(0, 30);
       amount = item.amount;
-      console.log(`${title} \t\t ${amount}`);
+      console.log(`${title} \t\t\t\tRs ${amount} \n\n`);
     }
 
     console.log("\n\nBad Scans:-\n");
     for(item of badScans) {
       content = item.result[0].desc.slice(0,50);
-      console.log(`${content}`);
+      console.log(`${content}\n\n`);
     }
 
   });
