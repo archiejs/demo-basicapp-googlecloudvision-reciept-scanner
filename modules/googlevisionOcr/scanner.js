@@ -5,7 +5,10 @@ const promisify = require('es6-promisify');
 const debug = require('debug')('demo-archiejs-scanner');
 
 var ScanDoc = function(options, deps) {
-  const gcloud = GCloud({ projectId: options.projectId });
+  const gcloud = GCloud({
+    keyFilename: options.keyFilename,
+    projectId: options.projectId
+  });
   this.vision = gcloud.vision();
 }
 

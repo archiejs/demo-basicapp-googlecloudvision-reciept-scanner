@@ -1,5 +1,7 @@
 'use strict';
 
+var join = require('path').join;
+
 var gconf = require('./../secrets/google-local.json');
 
 module.exports = {
@@ -21,6 +23,7 @@ module.exports = {
     clientID: gconf.web.client_id,
     clientSecret: gconf.web.client_secret,
     projectId: gconf.web.project_id,
-    callbackURL: gconf.web.redirect_uris[0]
+    callbackURL: gconf.web.redirect_uris[0],
+    keyFilename: join(__dirname, '..', 'secrets', 'recieptscanner-private.json')
   }
 };

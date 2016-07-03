@@ -2,13 +2,19 @@
 
 var config = require('./config/env');
 
-// individual modules
+// individual modules and options
 
 exports.googleAuth = "modules/googleauth";
 
 exports.googleDrive = "modules/googledrive";
 
-exports.googleVision = "modules/googlevisionOcr";
+exports.googleVision = {
+  packagePath: "modules/googlevisionOcr",
+
+  // options
+  keyFilename: config.google.keyFilename,
+  projectId: config.google.projectId
+};
 
 exports.commandline = "modules/commandline";
 
