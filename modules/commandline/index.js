@@ -61,7 +61,7 @@ function getTaskDetailsFromUser() {
   debug('getTaskDetailsFromUser');
   let details = {};
   const now = new Date();
-  const thisMonth = now.getMonth();
+  const thisMonth = now.getMonth() + 1;
   const thisYear = now.getYear() - 100;
   return Promise.resolve()
     .then(() => question(`What is the month on the reciepts (1-12) : [${thisMonth}] `))
