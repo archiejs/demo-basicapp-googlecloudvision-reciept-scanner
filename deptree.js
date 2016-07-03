@@ -4,34 +4,24 @@ var config = require('./config/env');
 
 // individual modules and options
 
-exports.googleAuth = "modules/googleauth";
+exports.googleAuth = {
+  packagePath: "modules/googleauth",
+  scopes: config.google.scopes
+};
 
 exports.googleDrive = "modules/googledrive";
 
 exports.googleVision = {
   packagePath: "modules/googlevisionOcr",
-
-  // options
   keyFilename: config.google.keyFilename,
   projectId: config.google.projectId
 };
 
+exports.googleDocs = "modules/googleDocs";
+
 exports.commandline = "modules/commandline";
 
 exports.caches = "modules/caches";
-
-/*
- * Common modules are common across sub-projects.
- * Ex: db module, analytics module are contendors.
- */
-
-exports.common = [
-  {
-    "packagePath": "models",
-    "packageEnhancer": "mongodb",
-    "server": config.db
-  }
-];
 
 // main app
 
@@ -40,11 +30,12 @@ exports.app =
     exports.googleAuth,
     exports.googleDrive,
     exports.googleVision,
+    exports.googleDocs,
     exports.commandline,
     exports.caches
   ];
 
 
-// microservers - empty
+// other microservices - none
 
 module.exports = exports;
