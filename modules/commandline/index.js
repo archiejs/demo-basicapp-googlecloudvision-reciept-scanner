@@ -84,6 +84,7 @@ function getFilesFromDrive(details) {
   let syncNext = function() {
     if (queue.length > 0) {
       let {id, dest} = queue.shift();
+      console.log(`downloading file to ${dest}`);
       return drive.getFileContent(auth, id, dest);
     }
   };
@@ -126,6 +127,7 @@ function doScanNewReceipts(files) {
   let scanNext = function() {
     if (queue.length > 0) {
       let {ocr, image, dest} = queue.shift();
+      console.log(`scanning file ${image}`);
       return scanner.detectText(image)
         .then((json) => {
           let text = JSON.stringify(json, null, 10);
