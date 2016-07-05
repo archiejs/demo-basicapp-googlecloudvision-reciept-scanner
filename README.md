@@ -43,11 +43,11 @@ What is the month on the reciepts (1-12) : [7]
 What is the name of the google drive folder to scan : [Receipts]
 ```
 
-For the first, cut-copy-paste the url from browser to the command line prompt and press enter.
+For the first prompt (token url), cut-copy-paste the url from browser to the command line prompt and press enter.
 
-For the second, hit enter again (this is not currently used).
+For the second prompt (month), hit enter again (this is not currently used).
 
-For the third, specify the name of the google drive folder which has your receipts. My receipts are store here https://drive.google.com/drive/folders/0B6AH_WUpS8TnQ0pXc3hmZDQxWkk (and you are free to use the same).
+For the third question prompt (folder name), specify the name of the google drive folder which has your receipts. You can copy test receipts from our test google drive folder [test google drive folder](https://drive.google.com/drive/folders/0B6AH_WUpS8TnQ0pXc3hmZDQxWkk).
 
 See `Output` section below, to see the program output.
 
