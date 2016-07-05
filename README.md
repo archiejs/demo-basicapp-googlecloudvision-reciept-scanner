@@ -51,14 +51,9 @@ For the third, specify the name of the google drive folder which has your receip
 
 See `Output` section below, to see the program output.
 
-
 ## Running testcases
 
 TO BE ADDED
-
-
-## Output
-
 
 ## Output
 
