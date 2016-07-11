@@ -15,9 +15,37 @@ reciepts.
 
 ## Prerequisites
 
-Create a google app with following details :-
+We will need to create a google app on (https://console.cloud.google.com/)[google cloud]. You will need a credit card to enable the free tier version of google vision APIs used in the project. 
 
-TO BE ADDED
+Step 1. Create a google project at (https://console.cloud.google.com/)[google cloud] . My project is called `reciptscanner`.
+
+Step 2. Enable google APIs (go to your project dashboard and find `enable api's` link.
+
+```
+a. Google Plus API (for auth)
+b. Google drive API (reciepts are stored in drive)
+c. Google vision API (OCR scanning of reciepts - needs a credit card)
+d. Google Sheets API (*TODO* final result is dumpted into a spreadsheet)
+```
+
+Step 3. Create credentials. This is an option on the navigation menu (lefthand) on your project dashboard.
+
+```
+a. Fill up details for oAuth consent screen (email, product name).
+```
+
+Next, we need to create `credetials`.
+
+```
+b. Goto `credentials` tab and click on `create credentials` button. Select `OAuth Client ID` from the list.
+c. Choose `web application` next (in application type). In the form that opens up,
+    1. Provide application name (I choose `recipt scanner local dev` in my case)
+    2. Provide origin `http://localhost:3000`
+    3. Provide callback URL `http://localhost:3000/google/auth/callback`
+d. Click on `create` button (and ok..ok.. next). You are redirected back to application dashboard where you will see newly created OAuth 2.0 Client ID. Click on it (`reciept scanner local dev`) and inside, download the json. 
+e. Move this json file into `config/secrets/scanapp-creds.json` location (where out app config will be able to access it). NOTE: this is a secret file and you should not publicly share it.
+```
+
 
 ## Installation
 
