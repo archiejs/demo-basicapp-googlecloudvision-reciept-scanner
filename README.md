@@ -28,24 +28,47 @@ c. Google vision API (OCR scanning of reciepts - needs a credit card)
 d. Google Sheets API (*TODO* final result is dumpted into a spreadsheet)
 ```
 
-Step 3. Create credentials. This is an option on the navigation menu (lefthand) on your project dashboard.
+Step 3. Create credentials. This is an option on the navigation menu (lefthand) on your project's API manager (accessible from project dashboard).
+
+First, we need to setup `OAuth 2.0` .
 
 ```
-a. Fill up details for oAuth consent screen (email, product name).
+1. Fill up details for oAuth consent screen (email, product name).
 ```
 
-Next, we need to create `credetials`.
+Next, we need to create `credetials` to use the APIs.
 
 ```
-b. Goto `credentials` tab and click on `create credentials` button. Select `OAuth Client ID` from the list.
-c. Choose `web application` next (in application type). In the form that opens up,
+1. Goto `credentials` tab and click on `create credentials` button. 
+   Select `OAuth Client ID` from the list.
+2. Choose `web application` next (in application type) In the form that opens up,
     1. Provide application name (I choose `recipt scanner local dev` in my case)
     2. Provide origin `http://localhost:3000`
     3. Provide callback URL `http://localhost:3000/google/auth/callback`
-d. Click on `create` button (and ok..ok.. next). You are redirected back to application dashboard where you will see newly created OAuth 2.0 Client ID. Click on it (`reciept scanner local dev`) and inside, download the json. 
-e. Move this json file into `config/secrets/scanapp-creds.json` location (where out app config will be able to access it). NOTE: this is a secret file and you should not publicly share it.
+3. Click on `create` button (and ok..ok.. next). 
+   You are redirected back to application dashboard where you will 
+   see newly created OAuth 2.0 Client ID. Click on it (`reciept scanner local dev`) 
+   and inside, download the json. 
+4. Move/copy the downloaded json to `config/secrets/scanapp-creds.json`
+   location (where out app config will be able to access it). 
+   NOTE: this is a secret file and should not be published on web.
 ```
 
+Next, we need to create a (https://developers.google.com/identity/protocols/OAuth2ServiceAccount)[google service account] for using google vision APIs. Here are the steps :-
+
+```
+1. From the same API manager screen, click on `Manage service accounts` to go to the
+   service account manager.
+2. In service account manager, click on `CREATE SERVICE ACCOUNT` on top. Fillup the
+   form which pops up :-
+   a. Enter name of service account (`reciptscanner` in my case)
+   b. Select `Furnish a new private key` checkbox and select `json` sub-option.
+   c. Click on `create`
+3. Move/copy the downloaded json to `config/secrets/scanapp-pkey.json` .
+   NOTE: this is a secret file and should not be published on web.
+```
+
+With OAuth 2.0 enabled on google console, and files `config/secrets/scanapp-creds.json` and `config/secrets/scanapp-pkey` placed in our application directories, we are almost ready to run the demo app. 
 
 ## Installation
 
