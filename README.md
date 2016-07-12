@@ -15,9 +15,9 @@ reciepts.
 
 ## Prerequisites
 
-We will need to create a google app on (https://console.cloud.google.com/)[google cloud]. You will need a credit card to enable the free tier version of google vision APIs used in the project. 
+We will need to create a google app on [google cloud](https://console.cloud.google.com/). You will need a credit card to enable the free tier version of google vision APIs used in the project. 
 
-Step 1. Create a google project at (https://console.cloud.google.com/)[google cloud] . My project is called `reciptscanner`.
+Step 1. Create a google project at [google cloud](https://console.cloud.google.com/) . My project is called `reciptscanner`.
 
 Step 2. Enable google APIs (go to your project dashboard and find `enable api's` link.
 
@@ -54,7 +54,7 @@ Next, we need to create `credetials` to use the APIs.
    NOTE: this is a secret file and should not be published on web.
 ```
 
-Next, we need to create a (https://developers.google.com/identity/protocols/OAuth2ServiceAccount)[google service account] for using google vision APIs. Here are the steps :-
+Next, we need to create a [google service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) for using google vision APIs. Here are the steps :-
 
 ```
 1. From the same API manager screen, click on `Manage service accounts` to go to the
