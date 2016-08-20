@@ -5,7 +5,7 @@ to do a task. In this case, the pipeline is as follows :-
 
 1. Read reciepts from google drive
 2. Run OCR on them with google vision
-3. Save the results in google docs
+3. Console the results (later _we could save in google spreadsheets_)
 
 This project is also a good way to see how well google vision can handle old washed out
 reciepts.
